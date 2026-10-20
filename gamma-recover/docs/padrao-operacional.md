@@ -21,6 +21,12 @@ Novos atendimentos com Retorno agendado ou Promessa de pagamento criam a tarefa 
 
 ## Vínculo dos atendimentos
 
+A operação de cobrança usa uma fila de casos à esquerda e a ficha selecionada à direita, substituindo a tabela acima dos detalhes. Cada item informa pessoa, contrato, empresa, valor original e vencimento. A fila tem busca e ordenação por vencimento, nome ou valor; a lista rola internamente. Em telas menores, a fila fica acima e selecionar um contrato leva à ficha.
+
+A ficha mostra um resumo do contrato e separa **Contato**, **Histórico** e **Tarefas** em abas. **Registrar atendimento** é a ação principal: abre o formulário no contexto e recolhe os canais. Salvar leva ao histórico; cancelar retorna aos canais. Alternar as abas preserva o texto não salvo. Retornos e promessas continuam criando tarefas na mesma transação. É possível criar uma tarefa com o contrato já selecionado e concluir pendências sem sair da ficha. Concluir tarefa não registra contato nem recebimento.
+
+A busca aceita nome, documento, contrato e empresa. Busca, ordenação e seleção explícita ficam na URL e sobrevivem à recarga ou ao retorno pelo navegador. O histórico principal mostra apenas o contrato selecionado; registros antigos sem contrato ficam em uma seção identificada, sem atribuição retroativa. Cancelar um atendimento alterado, trocar a empresa ou navegar para outra rota exige confirmação de descarte; recarregar com alterações usa o aviso nativo do navegador.
+
 Novos contatos preservam `debtId` e `actor`. Novos encerramentos retiram apenas o contrato correspondente da fila. Registros antigos sem contrato mantêm sua abrangência original de pessoa/credor, sem atribuir contrato artificialmente ou reabrir silenciosamente a operação. O histórico permanece disponível e o relatório de produtividade passa a incluir contrato e operador, identificando os campos desconhecidos do legado.
 
 ## Réguas implementadas
@@ -46,6 +52,8 @@ Testes de domínio cobrem tarefas a partir de contatos, conclusão concorrente, 
 O painel administrativo oferece o botão Assistente no canto inferior direito. O diálogo tem perguntas sugeridas conforme a rota, campo de dúvidas, atalhos e limpeza de conversa. A base local orienta sobre os fluxos implementados; não utiliza IA generativa, não consulta registros e não executa mutações. Perguntas não reconhecidas recebem uma mensagem de limite, sem respostas inventadas. A conversa fica somente na memória do painel, limitada às últimas 40 mensagens, e termina ao sair da sessão ou recarregar. Não há API externa nem chaves no frontend. Escape fecha o diálogo e devolve o foco ao botão; telas pequenas mantêm rolagem interna.
 
 ## Central multicanal demonstrativa
+
+O editor mantém o campo de mensagem e, em e-mail, o assunto. O botão **Opções da mensagem** reúne canal, contrato e modelo em um modal; o canal e o contrato atuais aparecem em um resumo compacto. Trocar o canal abre a conversa correspondente e fecha o modal. Escolher um modelo preenche o texto editável e retorna ao editor. O contrato escolhido atualiza o contexto. As seleções são imediatas; Concluir, Escape e Fechar encerram o modal. Texto ou edição em andamento continuam impedindo a troca de canal/contrato e a substituição por modelo, preservando o conteúdo.
 
 Conversas agrupa registros por contribuinte e empresa, com busca por nome/empresa/destino e filtro por canal. O painel mantém histórico cronológico dos três canais, com destino preservado, contrato, autor, assunto quando e-mail e estado escrito. O contexto apresenta acordos e a próxima tarefa pendente. Não existe atribuição de responsável por fila nesta etapa; o autor de cada mensagem é preservado.
 

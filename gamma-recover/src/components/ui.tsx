@@ -69,9 +69,11 @@ export const Form = styled.form`
 `;
 export const FilterBar = styled.div`
   display: flex;
-  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+
   gap: 12px;
-  flex-wrap: wrap;
   padding: 14px 18px;
   border-bottom: 1px solid ${({ theme }) => theme.border.subtle};
   input {

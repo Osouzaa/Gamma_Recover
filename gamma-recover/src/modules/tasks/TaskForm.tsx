@@ -8,10 +8,18 @@ import { today } from '../../utils/format';
 import { Modal } from '../../components/Modal';
 import { Feedback } from '../../components/Feedback';
 import { Button, Field, Form, Input, Select } from '../../components/ui';
-export function TaskForm({ db, onClose }: { db: Database; onClose: () => void }) {
+export function TaskForm({
+  db,
+  onClose,
+  initialDebtId = '',
+}: {
+  db: Database;
+  onClose: () => void;
+  initialDebtId?: string;
+}) {
   const { scope } = useWorkspace();
   const action = useAction();
-  const [debtId, setDebtId] = useState('');
+  const [debtId, setDebtId] = useState(initialDebtId);
   const [title, setTitle] = useState('');
   const [dueDate, setDueDate] = useState(today());
   return (
@@ -28,6 +36,7 @@ export function TaskForm({ db, onClose }: { db: Database; onClose: () => void })
           Contrato
           <Select
             required
+            disabled={!!initialDebtId}
             aria-label="Contrato da tarefa"
             value={debtId}
             onChange={(e) => setDebtId(e.target.value)}

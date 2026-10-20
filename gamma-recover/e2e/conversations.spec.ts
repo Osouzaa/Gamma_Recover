@@ -16,6 +16,24 @@ test('chat local mantém empresa, contrato e rascunhos sem habilitar envio real'
   await expect(create.getByLabel('Contrato do contribuinte')).toHaveValue('dt-10');
   await create.getByRole('button', { name: 'Preparar conversa', exact: true }).click();
   await expect(create).toHaveCount(0);
+  const optionsButton = page.getByRole('button', { name: 'Opções da mensagem', exact: true });
+  await expect(page.getByLabel('Canal em atendimento')).toHaveCount(0);
+  await expect(page.getByLabel('Contrato em atendimento')).toHaveCount(0);
+  await expect(page.getByLabel('Modelo de mensagem')).toHaveCount(0);
+  await optionsButton.click();
+  const options = page.getByRole('dialog', { name: 'Opções da mensagem', exact: true });
+  await expect(options.getByLabel('Canal em atendimento')).toHaveValue('WhatsApp');
+  await expect(options.getByLabel('Contrato em atendimento')).toHaveValue('dt-10');
+  await options.getByLabel('Modelo de mensagem').selectOption('apresentacao');
+  await expect(options).toHaveCount(0);
+  await expect(page.getByLabel('Mensagem do chat')).toHaveValue(/Estamos disponíveis/);
+  await optionsButton.click();
+  await expect(options.getByLabel('Canal em atendimento')).toBeDisabled();
+  await expect(options.getByLabel('Contrato em atendimento')).toBeDisabled();
+  await expect(options.getByLabel('Modelo de mensagem')).toBeDisabled();
+  await page.keyboard.press('Escape');
+  await expect(options).toHaveCount(0);
+  await expect(optionsButton).toBeFocused();
   await expect(
     page.getByRole('button', { name: 'Enviar pelo WhatsApp', exact: true }),
   ).toBeDisabled();
@@ -96,7 +114,10 @@ test('central multicanal preserva rascunhos e simulações por contribuinte e ca
   await expect(history).toContainText('E-mail · Rascunho local');
   await page.getByRole('button', { name: 'Simular envio', exact: true }).click();
   await expect(history).toContainText('Envio simulado');
+  await page.getByRole('button', { name: 'Opções da mensagem', exact: true }).click();
   await page.getByLabel('Canal em atendimento').selectOption('SMS');
+  await expect(page.getByRole('dialog', { name: 'Opções da mensagem' })).toHaveCount(0);
+  await page.getByRole('button', { name: 'Opções da mensagem', exact: true }).click();
   await expect(page.getByLabel('Canal em atendimento')).toHaveValue('SMS');
   await page.getByLabel('Modelo de mensagem').selectOption('retorno');
   await page.getByRole('button', { name: 'Salvar rascunho', exact: true }).click();
@@ -105,8 +126,12 @@ test('central multicanal preserva rascunhos e simulações por contribuinte e ca
   await expect(history).toContainText('Falha simulada');
   await expect(history).toContainText('E-mail demonstrativo multicanal.');
   await expect(page.getByRole('button', { name: 'Enviar por SMS', exact: true })).toBeDisabled();
+  await page.getByRole('button', { name: 'Opções da mensagem', exact: true }).click();
   await page.getByLabel('Canal em atendimento').selectOption('WhatsApp');
-  await expect(page.getByLabel('Canal em atendimento')).toHaveValue('WhatsApp');
+  await expect(page.getByRole('dialog', { name: 'Opções da mensagem' })).toHaveCount(0);
+  await expect(
+    page.getByRole('button', { name: 'Enviar pelo WhatsApp', exact: true }),
+  ).toBeDisabled();
   await expect(history).toContainText('Falha simulada');
   await page.reload();
   await expect(history).toContainText('E-mail demonstrativo multicanal.');
@@ -123,4 +148,10 @@ test('central multicanal preserva rascunhos e simulações por contribuinte e ca
     path: 'artifacts/conversations-multichannel-mobile.png',
     fullPage: true,
   });
+  await page.getByRole('button', { name: 'Opções da mensagem', exact: true }).click();
+  await expect(page.getByRole('dialog', { name: 'Opções da mensagem' })).toBeVisible();
+  await expect(page.getByLabel('Modelo de mensagem')).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.screenshot({ path: 'artifacts/message-options-mobile.png', fullPage: true });
+  await page.getByRole('button', { name: 'Concluir', exact: true }).click();
 });

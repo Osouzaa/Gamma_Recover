@@ -31,6 +31,8 @@ Conversas permite somente rascunhos locais. O usuário escolheu a API oficial da
 
 ## Direção de design
 
+Operação de cobrança: o usuário relatou dificuldade em entender a tabela seguida de detalhes e botões. A direção passa a ser fila lateral e um caso por vez, com ação principal de registrar atendimento e abas Contato/Histórico/Tarefas. Manter a proteção de texto não salvo e os vínculos por contrato. Ver o comportamento em `docs/padrao-operacional.md`.
+
 Identidade Gamma, cores e componentes estão coerentes nas telas revisadas; a experiência completa ainda precisa de revisão no fluxo real de trabalho.
 
 - Priorizar ficha de atendimento que reúna pessoa, empresa, contrato, canais, histórico e próxima ação.

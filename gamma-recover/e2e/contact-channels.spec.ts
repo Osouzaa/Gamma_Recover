@@ -35,7 +35,7 @@ test('cadastra canais explícitos, registra o canal usado e impede contato após
   await page.screenshot({ path: 'artifacts/contributor-channels-desktop.png', fullPage: true });
   await page.getByRole('link', { name: 'Registrar atendimento' }).click();
   await page.getByRole('button', { name: 'Registrar atendimento', exact: true }).click();
-  const attendance = page.getByRole('dialog', { name: 'Registrar atendimento', exact: true });
+  const attendance = page.getByRole('region', { name: 'Registrar atendimento', exact: true });
   await expect(attendance.getByLabel('Canal do atendimento')).toHaveValue('WhatsApp');
   await attendance.getByLabel('Canal do atendimento').selectOption('Telefone');
   await attendance.getByLabel('Resultado do contato').selectOption('Sem contato');

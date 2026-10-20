@@ -1,5 +1,13 @@
 import { useAdminAuth } from './AdminAuth';
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { storageKey } from '../../services/store';
 import { useDatabase } from '../../hooks/useDatabase';
@@ -7,10 +15,18 @@ import type { Scope } from '../../services/store';
 const Context = createContext<{
   creditorId: string;
   setCreditorId: (id: string) => void;
+  guardCreditorChange: (guard: () => boolean) => () => void;
   scope: Scope;
 } | null>(null);
 export function WorkspaceProvider({ children }: { children: ReactNode }) {
   const [creditorId, setCreditorId] = useState('');
+  const creditorGuard = useRef<(() => boolean) | null>(null);
+  const guardCreditorChange = useCallback((guard: () => boolean) => {
+    creditorGuard.current = guard;
+    return () => {
+      if (creditorGuard.current === guard) creditorGuard.current = null;
+    };
+  }, []);
   const { session } = useAdminAuth();
   useEffect(() => setCreditorId(''), [session?.email]);
   const { data } = useDatabase();
@@ -27,7 +43,11 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
     <Context.Provider
       value={{
         creditorId,
-        setCreditorId,
+        setCreditorId: (id) => {
+          if (id === creditorId || !creditorGuard.current || creditorGuard.current())
+            setCreditorId(id);
+        },
+        guardCreditorChange,
         scope: { creditorId, role: data?.settings.role || 'Administrador' },
       }}
     >

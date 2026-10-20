@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { SlidersHorizontal } from 'lucide-react';
+import { Modal } from '../../components/Modal';
 import { Link } from 'react-router-dom';
 import type { Database } from '../../types/domain';
 import type { ChatDraft, Conversation, MessageChannel } from '../../types/conversations';
@@ -59,6 +61,7 @@ export function ConversationPane({
   const [text, setText] = useState('');
   const [subject, setSubject] = useState('');
   const [editing, setEditing] = useState('');
+  const [optionsOpen, setOptionsOpen] = useState(false);
   const selectedDebt = debts.find((d) => d.id === debtId);
   const channel = conversationChannel(conversation);
   const destinationChanged = messageDestination(debtor, channel) !== conversation.destination;
@@ -92,47 +95,14 @@ export function ConversationPane({
           </div>
           <Link to={`/devedores/${debtor.id}`}>Abrir cadastro →</Link>
         </PanelHeader>
-        <PanelBody>
-          <Field>
-            Canal em atendimento
-            <Select
-              aria-label="Canal em atendimento"
-              value={channel}
-              disabled={
-                scope.role === 'Financeiro' ||
-                !selectedDebt ||
-                contactBlocked(db, selectedDebt) ||
-                !!text ||
-                !!subject ||
-                !!editing ||
-                action.isPending
-              }
-              onChange={(e) => {
-                const nextChannel = e.target.value as MessageChannel;
-                action.mutate(() => ConversationService.open(scope, debtId, nextChannel), {
-                  onSuccess: (id) => onOpen(String(id)),
-                });
-              }}
-            >
-              {messageChannels.map((value) => (
-                <option key={value} value={value} disabled={!messageDestination(debtor, value)}>
-                  {value}
-                  {!messageDestination(debtor, value) ? ' · Sem destino válido' : ''}
-                </option>
-              ))}
-            </Select>
-          </Field>
-          <Muted>
-            Preferência cadastrada: {debtor.preferredChannel || 'não informada'}. Preferência não
-            confirma consentimento. Salve ou descarte o texto antes de trocar de canal.
-          </Muted>
-          {destinationChanged && (
+        {destinationChanged && (
+          <PanelBody>
             <Alert $error>
               O destino do cadastro mudou. Histórico preservado para consulta; prepare uma nova
               conversa para o contato atual.
             </Alert>
-          )}
-        </PanelBody>
+          </PanelBody>
+        )}
         <MessageHistory
           db={db}
           conversation={conversation}
@@ -177,48 +147,9 @@ export function ConversationPane({
                 );
               }}
             >
-              <Field>
-                Contrato em atendimento
-                <Select
-                  aria-label="Contrato em atendimento"
-                  value={debtId}
-                  disabled={scope.role === 'Financeiro' || !!editing || !!text || !!subject}
-                  onChange={(e) => setDebtId(e.target.value)}
-                >
-                  <option value="">Selecione um contrato</option>
-                  {debts.map((debt) => (
-                    <option
-                      key={debt.id}
-                      value={debt.id}
-                      disabled={debt.disputed || isSuspended(debt)}
-                    >
-                      {debt.reference}
-                      {debt.disputed ? ' · Contestada' : isSuspended(debt) ? ' · Suspensa' : ''}
-                    </option>
-                  ))}
-                </Select>
-              </Field>
-              <Field>
-                Modelo de mensagem
-                <Select
-                  aria-label="Modelo de mensagem"
-                  value=""
-                  disabled={!!readOnly || !!text}
-                  onChange={(e) => {
-                    if (!e.target.value) return;
-                    setText(
-                      e.target.value === 'retorno'
-                        ? 'Olá! Aqui é a equipe Gamma. Podemos combinar um horário para conversar? Esta é uma mensagem demonstrativa.'
-                        : 'Olá! Aqui é a equipe Gamma. Estamos disponíveis para esclarecer suas dúvidas. Esta é uma mensagem demonstrativa.',
-                    );
-                    if (channel === 'E-mail') setSubject('Atendimento Gamma');
-                  }}
-                >
-                  <option value="">Escrever do zero ou escolher um modelo</option>
-                  <option value="apresentacao">Apresentação</option>
-                  <option value="retorno">Combinar retorno</option>
-                </Select>
-              </Field>
+              <Muted>
+                {channel} · {selectedDebt?.reference || 'Sem contrato selecionado'}
+              </Muted>
               {channel === 'E-mail' && (
                 <Field>
                   Assunto do e-mail
@@ -269,6 +200,15 @@ export function ConversationPane({
                       ? 'por SMS'
                       : 'pelo WhatsApp'}
                 </Button>
+                <Button
+                  type="button"
+                  onClick={() => setOptionsOpen(true)}
+                  disabled={action.isPending}
+                  aria-haspopup="dialog"
+                >
+                  <SlidersHorizontal size={15} />
+                  Opções da mensagem
+                </Button>
                 <Muted>
                   {text.length}/{limit}
                 </Muted>
@@ -283,6 +223,97 @@ export function ConversationPane({
           </Stack>
         </PanelBody>
       </Panel>
+      {optionsOpen && (
+        <Modal
+          title="Opções da mensagem"
+          onClose={() => {
+            if (!action.isPending) setOptionsOpen(false);
+          }}
+        >
+          <Stack>
+            <Field>
+              Canal em atendimento
+              <Select
+                aria-label="Canal em atendimento"
+                value={channel}
+                disabled={
+                  scope.role === 'Financeiro' ||
+                  !selectedDebt ||
+                  contactBlocked(db, selectedDebt) ||
+                  !!text ||
+                  !!subject ||
+                  !!editing ||
+                  action.isPending
+                }
+                onChange={(e) => {
+                  const nextChannel = e.target.value as MessageChannel;
+                  action.mutate(() => ConversationService.open(scope, debtId, nextChannel), {
+                    onSuccess: (id) => onOpen(String(id)),
+                  });
+                }}
+              >
+                {messageChannels.map((value) => (
+                  <option key={value} value={value} disabled={!messageDestination(debtor, value)}>
+                    {value}
+                    {!messageDestination(debtor, value) ? ' · Sem destino válido' : ''}
+                  </option>
+                ))}
+              </Select>
+            </Field>
+            <Muted>
+              Preferência cadastrada: {debtor.preferredChannel || 'não informada'}. Preferência não
+              confirma consentimento. Salve ou descarte o texto antes de trocar de canal.
+            </Muted>
+            <Field>
+              Contrato em atendimento
+              <Select
+                aria-label="Contrato em atendimento"
+                value={debtId}
+                disabled={scope.role === 'Financeiro' || !!editing || !!text || !!subject}
+                onChange={(e) => setDebtId(e.target.value)}
+              >
+                <option value="">Selecione um contrato</option>
+                {debts.map((debt) => (
+                  <option
+                    key={debt.id}
+                    value={debt.id}
+                    disabled={debt.disputed || isSuspended(debt)}
+                  >
+                    {debt.reference}
+                    {debt.disputed ? ' · Contestada' : isSuspended(debt) ? ' · Suspensa' : ''}
+                  </option>
+                ))}
+              </Select>
+            </Field>
+            <Field>
+              Modelo de mensagem
+              <Select
+                aria-label="Modelo de mensagem"
+                value=""
+                disabled={!!readOnly || !!text}
+                onChange={(e) => {
+                  if (!e.target.value) return;
+                  setText(
+                    e.target.value === 'retorno'
+                      ? 'Olá! Aqui é a equipe Gamma. Podemos combinar um horário para conversar? Esta é uma mensagem demonstrativa.'
+                      : 'Olá! Aqui é a equipe Gamma. Estamos disponíveis para esclarecer suas dúvidas. Esta é uma mensagem demonstrativa.',
+                  );
+                  if (channel === 'E-mail') setSubject('Atendimento Gamma');
+                  setOptionsOpen(false);
+                }}
+              >
+                <option value="">Escrever do zero ou escolher um modelo</option>
+                <option value="apresentacao">Apresentação</option>
+                <option value="retorno">Combinar retorno</option>
+              </Select>
+            </Field>
+            <Feedback error={action.error} />
+            <Button type="button" disabled={action.isPending} onClick={() => setOptionsOpen(false)}>
+              Concluir
+            </Button>
+          </Stack>
+        </Modal>
+      )}
       <ConversationContext db={db} debt={selectedDebt} />
     </ConversationWorkspace>
   );
