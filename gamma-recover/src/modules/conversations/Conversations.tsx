@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { useDatabase } from '../../hooks/useDatabase';
 import { useWorkspace } from '../../app/providers/Context';
 import { creditorOf } from '../../services/domain';
-import { contactDestination } from '../../services/contactChannels';
+import { conversationChannel } from '../../services/messageChannels';
 import { scopedDebts } from '../../services/operations';
 import { ErrorState, LoadingState } from '../../components/Feedback';
 import {
@@ -16,6 +16,7 @@ import {
   Panel,
   PanelHeader,
   Stack,
+  Select,
 } from '../../components/ui';
 import { Modal } from '../../components/Modal';
 import { NewConversation } from './NewConversation';
@@ -27,6 +28,7 @@ export default function Conversations() {
   const [params] = useSearchParams();
   const [selectedId, setSelectedId] = useState('');
   const [search, setSearch] = useState('');
+  const [channelFilter, setChannelFilter] = useState('');
   const [creating, setCreating] = useState(false);
   const [integration, setIntegration] = useState(false);
   if (isLoading) return <LoadingState />;
@@ -40,27 +42,36 @@ export default function Conversations() {
     conversations.find((c) => c.id === selectedId) ||
     (queryDebt && queryDebtor
       ? conversations.find(
-          (c) =>
-            c.debtorId === queryDebtor.id &&
-            c.creditorId === creditorOf(db, queryDebt) &&
-            c.destination === contactDestination(queryDebtor, 'WhatsApp'),
+          (c) => c.debtorId === queryDebtor.id && c.creditorId === creditorOf(db, queryDebt),
         )
       : conversations[0]);
-  const rows = conversations.filter((c) =>
-    [
-      db.debtors.find((d) => d.id === c.debtorId)?.name,
-      db.creditors.find((v) => v.id === c.creditorId)?.name,
-      c.destination,
-    ]
-      .join(' ')
-      .toLowerCase()
-      .includes(search.toLowerCase()),
+  const groups = conversations.filter(
+    (c, index, all) =>
+      all.findIndex(
+        (other) => other.debtorId === c.debtorId && other.creditorId === c.creditorId,
+      ) === index,
   );
+  const rows = groups.filter((c) => {
+    const related = conversations.filter(
+      (other) => other.debtorId === c.debtorId && other.creditorId === c.creditorId,
+    );
+    return (
+      (!channelFilter || related.some((other) => conversationChannel(other) === channelFilter)) &&
+      [
+        db.debtors.find((d) => d.id === c.debtorId)?.name,
+        db.creditors.find((v) => v.id === c.creditorId)?.name,
+        ...related.map((other) => other.destination),
+      ]
+        .join(' ')
+        .toLowerCase()
+        .includes(search.toLowerCase())
+    );
+  });
   return (
     <>
       <PageHeader
         title="Conversas"
-        description="Atendimento por WhatsApp, com empresa e contribuinte identificados."
+        description="WhatsApp, e-mail e SMS em um histórico por contribuinte e empresa."
         actions={
           <Button
             $variant="primary"
@@ -73,36 +84,57 @@ export default function Conversations() {
       />
       <Stack>
         <Alert>
-          WhatsApp não conectado · Elegibilidade Meta pendente para cobrança de dívidas. Somente
-          rascunhos locais; nenhuma mensagem é enviada ou recebida.{' '}
+          Canais não conectados · Rascunhos e envios simulados locais. Nenhuma mensagem é enviada ou
+          recebida. Elegibilidade Meta pendente para WhatsApp.{' '}
           <Button onClick={() => setIntegration(true)}>Ver integração</Button>
         </Alert>
         <ChatLayout>
           <Panel>
             <PanelHeader>
               <h2>Conversas locais</h2>
-              <span>{conversations.length}</span>
+              <span>{groups.length}</span>
             </PanelHeader>
             <FilterBar>
               <Input
                 aria-label="Buscar conversa"
-                placeholder="Nome, empresa ou número…"
+                placeholder="Nome, empresa ou destino…"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
+              <Select
+                aria-label="Filtrar por canal"
+                value={channelFilter}
+                onChange={(e) => setChannelFilter(e.target.value)}
+              >
+                <option value="">Todos os canais</option>
+                {['WhatsApp', 'E-mail', 'SMS'].map((channel) => (
+                  <option key={channel}>{channel}</option>
+                ))}
+              </Select>
             </FilterBar>
             <ConversationList>
               {rows.length ? (
                 rows.map((c) => (
                   <ConversationButton
                     key={c.id}
-                    aria-pressed={selected?.id === c.id}
+                    aria-pressed={
+                      selected?.debtorId === c.debtorId && selected?.creditorId === c.creditorId
+                    }
                     onClick={() => setSelectedId(c.id)}
                   >
                     <span>{db.debtors.find((d) => d.id === c.debtorId)?.name}</span>
                     <small>{db.creditors.find((v) => v.id === c.creditorId)?.name}</small>
                     <small>
-                      +{c.destination} · {c.drafts.length} rascunhos
+                      {[
+                        ...new Set(
+                          conversations
+                            .filter(
+                              (other) =>
+                                other.debtorId === c.debtorId && other.creditorId === c.creditorId,
+                            )
+                            .map(conversationChannel),
+                        ),
+                      ].join(' · ')}
                     </small>
                   </ConversationButton>
                 ))
@@ -117,6 +149,7 @@ export default function Conversations() {
               db={db}
               conversation={selected}
               initialDebtId={queryDebt?.id || ''}
+              onOpen={setSelectedId}
             />
           ) : (
             <Panel>
@@ -148,7 +181,11 @@ export default function Conversations() {
       {integration && (
         <Modal title="Integração com a API oficial da Meta" onClose={() => setIntegration(false)}>
           <Stack>
-            <Alert>Integração em análise. Não informe tokens ou credenciais nesta tela.</Alert>
+            <Alert>Nenhum canal conectado. Não informe tokens ou credenciais nesta tela.</Alert>
+            <p>
+              E-mail e SMS exigem provedores, backend autenticado e retorno de status. Simulações
+              não confirmam envio, entrega ou leitura. Não há troca automática de canal.
+            </p>
             <p>
               A política oficial do WhatsApp Business inclui cobrança de dívidas entre os serviços
               proibidos. A elegibilidade do uso da Gamma precisa ser esclarecida com a Meta antes de
@@ -175,8 +212,8 @@ export default function Conversations() {
               destino e restrições antes de autorizar qualquer envio.
             </p>
             <p>
-              Até a integração ser ativada, o sistema armazena apenas rascunhos demonstrativos neste
-              navegador.
+              Até a integração ser ativada, o sistema armazena rascunhos e simulações demonstrativas
+              neste navegador.
             </p>
           </Stack>
         </Modal>

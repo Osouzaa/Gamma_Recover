@@ -1,20 +1,25 @@
-import { isSuspended } from '../../services/domain';
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import type { Database } from '../../types/domain';
-import type { Conversation } from '../../types/conversations';
+import type { ChatDraft, Conversation, MessageChannel } from '../../types/conversations';
 import { useWorkspace } from '../../app/providers/Context';
 import { useAction } from '../../hooks/useDatabase';
 import { ConversationService } from '../../services/conversations';
-import { contactDestination } from '../../services/contactChannels';
-import { creditorOf } from '../../services/domain';
+import {
+  conversationChannel,
+  displayDestination,
+  messageChannels,
+  messageDestination,
+  messageLimit,
+} from '../../services/messageChannels';
+import { contactBlocked, creditorOf, isSuspended } from '../../services/domain';
 import { Feedback } from '../../components/Feedback';
 import {
   Alert,
   Button,
-  Empty,
   Field,
   Form,
+  Input,
   Muted,
   Panel,
   PanelBody,
@@ -24,23 +29,23 @@ import {
   Stack,
   Textarea,
 } from '../../components/ui';
-import { DraftList, ConversationWorkspace } from './styles';
+import { ConversationWorkspace } from './styles';
 import { ConversationContext } from './ConversationContext';
+import { MessageHistory } from './MessageHistory';
+
 export function ConversationPane({
   db,
   conversation,
   initialDebtId,
+  onOpen,
 }: {
   db: Database;
   conversation: Conversation;
   initialDebtId: string;
+  onOpen: (id: string) => void;
 }) {
   const { scope } = useWorkspace();
   const action = useAction();
-  const list = useRef<HTMLOListElement>(null);
-  useEffect(() => {
-    if (list.current) list.current.scrollTop = list.current.scrollHeight;
-  }, [conversation.drafts.length]);
   const debtor = db.debtors.find((d) => d.id === conversation.debtorId)!;
   const company = db.creditors.find((c) => c.id === conversation.creditorId)!;
   const debts = db.debts.filter(
@@ -52,16 +57,29 @@ export function ConversationPane({
       '',
   );
   const [text, setText] = useState('');
+  const [subject, setSubject] = useState('');
   const [editing, setEditing] = useState('');
   const selectedDebt = debts.find((d) => d.id === debtId);
-  const numberChanged = contactDestination(debtor, 'WhatsApp') !== conversation.destination;
+  const channel = conversationChannel(conversation);
+  const destinationChanged = messageDestination(debtor, channel) !== conversation.destination;
   const readOnly =
     scope.role === 'Financeiro' ||
-    debtor.blocked ||
     !selectedDebt ||
-    selectedDebt.disputed ||
-    isSuspended(selectedDebt) ||
-    numberChanged;
+    contactBlocked(db, selectedDebt) ||
+    destinationChanged;
+  const limit = messageLimit(channel);
+  const clear = () => {
+    setText('');
+    setSubject('');
+    setEditing('');
+  };
+  function edit(draft: ChatDraft) {
+    setText(draft.text);
+    setSubject(draft.subject || '');
+    setDebtId(draft.debtId);
+    setEditing(draft.id);
+    action.reset();
+  }
   return (
     <ConversationWorkspace>
       <Panel>
@@ -69,79 +87,76 @@ export function ConversationPane({
           <div>
             <h2>{debtor.name}</h2>
             <Muted>
-              {company.name} · +{conversation.destination}
+              {company.name} · {channel} · {displayDestination(channel, conversation.destination)}
             </Muted>
           </div>
           <Link to={`/devedores/${debtor.id}`}>Abrir cadastro →</Link>
         </PanelHeader>
-        {numberChanged && (
-          <Alert $error>
-            O WhatsApp do cadastro mudou. Esta conversa permanece para consulta; prepare outra
-            conversa para o número atual.
-          </Alert>
-        )}
-        <DraftList ref={list} aria-label="Rascunhos da conversa">
-          {!conversation.drafts.length && (
-            <Empty as="li">
-              <h3>Conversa preparada</h3>
-              <p>
-                Escreva um rascunho abaixo. A troca real depende de elegibilidade na Meta e
-                integração segura no backend.
-              </p>
-            </Empty>
+        <PanelBody>
+          <Field>
+            Canal em atendimento
+            <Select
+              aria-label="Canal em atendimento"
+              value={channel}
+              disabled={
+                scope.role === 'Financeiro' ||
+                !selectedDebt ||
+                contactBlocked(db, selectedDebt) ||
+                !!text ||
+                !!subject ||
+                !!editing ||
+                action.isPending
+              }
+              onChange={(e) => {
+                const nextChannel = e.target.value as MessageChannel;
+                action.mutate(() => ConversationService.open(scope, debtId, nextChannel), {
+                  onSuccess: (id) => onOpen(String(id)),
+                });
+              }}
+            >
+              {messageChannels.map((value) => (
+                <option key={value} value={value} disabled={!messageDestination(debtor, value)}>
+                  {value}
+                  {!messageDestination(debtor, value) ? ' · Sem destino válido' : ''}
+                </option>
+              ))}
+            </Select>
+          </Field>
+          <Muted>
+            Preferência cadastrada: {debtor.preferredChannel || 'não informada'}. Preferência não
+            confirma consentimento. Salve ou descarte o texto antes de trocar de canal.
+          </Muted>
+          {destinationChanged && (
+            <Alert $error>
+              O destino do cadastro mudou. Histórico preservado para consulta; prepare uma nova
+              conversa para o contato atual.
+            </Alert>
           )}
-          {conversation.drafts.map((draft) => (
-            <li key={draft.id}>
-              <Muted>
-                Rascunho local · {db.debts.find((d) => d.id === draft.debtId)?.reference}
-              </Muted>
-              <p>{draft.text}</p>
-              <small>
-                {draft.actor} ·{' '}
-                {new Date(draft.updatedAt).toLocaleString('pt-BR', {
-                  timeZone: 'America/Sao_Paulo',
-                })}
-              </small>
-              <Row>
-                <Button
-                  disabled={!!readOnly || action.isPending}
-                  onClick={() => {
-                    setText(draft.text);
-                    setDebtId(draft.debtId);
-                    setEditing(draft.id);
-                    action.reset();
-                  }}
-                >
-                  Editar rascunho
-                </Button>
-                <Button
-                  disabled={!!readOnly || action.isPending}
-                  onClick={() =>
-                    action.mutate(
-                      () => ConversationService.removeDraft(scope, conversation.id, draft.id),
-                      {
-                        onSuccess: () => {
-                          if (editing === draft.id) {
-                            setEditing('');
-                            setText('');
-                          }
-                        },
-                      },
-                    )
-                  }
-                >
-                  Excluir rascunho
-                </Button>
-              </Row>
-            </li>
-          ))}
-        </DraftList>
+        </PanelBody>
+        <MessageHistory
+          db={db}
+          conversation={conversation}
+          pending={action.isPending || !!editing}
+          onEdit={edit}
+          onRemove={(draft) =>
+            action.mutate(() => ConversationService.removeDraft(scope, conversation.id, draft.id))
+          }
+          onSimulate={(draft, failed) =>
+            action.mutate(() =>
+              ConversationService.simulate(
+                scope,
+                conversation.id,
+                draft.id,
+                failed ? 'Falha simulada' : 'Envio simulado',
+              ),
+            )
+          }
+        />
         <PanelBody>
           <Stack>
             {readOnly && (
               <Alert $error>
-                Conversa somente para consulta. Verifique o perfil, o número de WhatsApp e as
-                restrições do contrato.
+                Conversa somente para consulta. Verifique perfil, destino e restrições do contrato.
               </Alert>
             )}
             <Feedback error={action.error} />
@@ -156,13 +171,9 @@ export function ConversationPane({
                       debtId,
                       text,
                       editing || undefined,
+                      subject,
                     ),
-                  {
-                    onSuccess: () => {
-                      setText('');
-                      setEditing('');
-                    },
-                  },
+                  { onSuccess: clear },
                 );
               }}
             >
@@ -171,25 +182,63 @@ export function ConversationPane({
                 <Select
                   aria-label="Contrato em atendimento"
                   value={debtId}
-                  disabled={scope.role === 'Financeiro' || !!editing}
+                  disabled={scope.role === 'Financeiro' || !!editing || !!text || !!subject}
                   onChange={(e) => setDebtId(e.target.value)}
                 >
                   <option value="">Selecione um contrato</option>
-                  {debts.map((d) => (
-                    <option key={d.id} value={d.id} disabled={d.disputed || isSuspended(d)}>
-                      {d.reference}
-                      {d.disputed ? ' · Contestada' : isSuspended(d) ? ' · Suspensa' : ''}
+                  {debts.map((debt) => (
+                    <option
+                      key={debt.id}
+                      value={debt.id}
+                      disabled={debt.disputed || isSuspended(debt)}
+                    >
+                      {debt.reference}
+                      {debt.disputed ? ' · Contestada' : isSuspended(debt) ? ' · Suspensa' : ''}
                     </option>
                   ))}
                 </Select>
               </Field>
               <Field>
+                Modelo de mensagem
+                <Select
+                  aria-label="Modelo de mensagem"
+                  value=""
+                  disabled={!!readOnly || !!text}
+                  onChange={(e) => {
+                    if (!e.target.value) return;
+                    setText(
+                      e.target.value === 'retorno'
+                        ? 'Olá! Aqui é a equipe Gamma. Podemos combinar um horário para conversar? Esta é uma mensagem demonstrativa.'
+                        : 'Olá! Aqui é a equipe Gamma. Estamos disponíveis para esclarecer suas dúvidas. Esta é uma mensagem demonstrativa.',
+                    );
+                    if (channel === 'E-mail') setSubject('Atendimento Gamma');
+                  }}
+                >
+                  <option value="">Escrever do zero ou escolher um modelo</option>
+                  <option value="apresentacao">Apresentação</option>
+                  <option value="retorno">Combinar retorno</option>
+                </Select>
+              </Field>
+              {channel === 'E-mail' && (
+                <Field>
+                  Assunto do e-mail
+                  <Input
+                    aria-label="Assunto do e-mail"
+                    required
+                    maxLength={150}
+                    value={subject}
+                    disabled={!!readOnly}
+                    onChange={(e) => setSubject(e.target.value)}
+                  />
+                </Field>
+              )}
+              <Field>
                 {editing ? 'Editar mensagem local' : 'Mensagem'}
                 <Textarea
                   aria-label="Mensagem do chat"
-                  placeholder="Escreva uma mensagem para preparar o atendimento…"
+                  placeholder="Escreva uma mensagem para revisar…"
                   rows={3}
-                  maxLength={4096}
+                  maxLength={limit}
                   value={text}
                   disabled={!!readOnly}
                   onChange={(e) => setText(e.target.value)}
@@ -198,29 +247,37 @@ export function ConversationPane({
               <Row>
                 <Button
                   $variant="primary"
-                  disabled={!!readOnly || !text.trim() || action.isPending}
+                  disabled={
+                    !!readOnly ||
+                    !text.trim() ||
+                    (channel === 'E-mail' && !subject.trim()) ||
+                    action.isPending
+                  }
                 >
                   {editing ? 'Atualizar rascunho' : 'Salvar rascunho'}
                 </Button>
-                {editing && (
-                  <Button
-                    type="button"
-                    onClick={() => {
-                      setText('');
-                      setEditing('');
-                    }}
-                  >
-                    Cancelar edição
+                {(text || editing || subject) && (
+                  <Button type="button" onClick={clear}>
+                    {editing ? 'Cancelar edição' : 'Descartar texto'}
                   </Button>
                 )}
-                <Button type="button" disabled aria-describedby="whatsapp-disconnected">
-                  Enviar pelo WhatsApp
+                <Button type="button" disabled>
+                  Enviar{' '}
+                  {channel === 'E-mail'
+                    ? 'por e-mail'
+                    : channel === 'SMS'
+                      ? 'por SMS'
+                      : 'pelo WhatsApp'}
                 </Button>
-                <Muted>{text.length}/4096</Muted>
+                <Muted>
+                  {text.length}/{limit}
+                </Muted>
               </Row>
-              <Muted id="whatsapp-disconnected">
-                Envio indisponível: elegibilidade Meta pendente e backend não integrado. Rascunhos
-                não são enviados, entregues ou lidos.
+              <Muted>
+                Envio real indisponível. Salve o rascunho e use Simular envio ou Simular falha no
+                histórico. Não há entrega, leitura, custo nem troca automática de canal.
+                {channel === 'SMS' &&
+                  ' Limite demonstrativo de 160 caracteres; segmentação e codificação do provedor ainda não implementadas.'}
               </Muted>
             </Form>
           </Stack>

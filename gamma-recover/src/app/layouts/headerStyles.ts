@@ -50,10 +50,10 @@ export const Breadcrumb = styled.nav`
   }
 `;
 export const Content = styled.main`
-  padding: 24px;
+  padding: 24px 24px 96px;
   min-width: 0;
   @media (max-width: 760px) {
-    padding: 20px 16px;
+    padding: 20px 16px 96px;
   }
 `;
 export const DemoBar = styled.div`

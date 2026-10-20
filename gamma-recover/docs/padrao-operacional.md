@@ -8,7 +8,7 @@ Direção aprovada pelo usuário em 20/10/2026 a partir das referências de tare
 - Abas para trabalhos distintos ou estados de uma lista, sem concentrar todas as análises em uma página extensa. Indicadores separam **Carteira e território** de **Recuperação e operação**. O período continua pertencendo à análise financeira de recuperação.
 - Tabelas compactas para trabalho em volume, seleção explícita e painel de detalhes no contexto. No celular, colunas viram blocos e tabelas conservam rolagem interna.
 - Réguas exibem etapas relativas ao vencimento, canal e ação. Não usar cor como única indicação de estado. O editor conserva validação, erros e cancelamento explícitos.
-- Conversas mantêm lista, rascunho e contexto do contrato juntos em telas amplas. Em telas menores, o contexto fica abaixo. Rascunhos são identificados como locais; envio segue desabilitado.
+- Conversas mantêm lista, rascunho e contexto do contrato juntos em telas amplas. Em telas menores, o contexto fica abaixo. Rascunhos são identificados como locais; envio real segue desabilitado. O histórico reúne WhatsApp, e-mail e SMS, com simulações explícitas.
 - Reutilizar componentes, tokens e foco/teclado existentes. Não copiar nomes, logotipos ou paleta de fornecedores. Não acrescentar robô decorativo ou indicadores sem fonte.
 
 ## Tarefas implementadas
@@ -40,3 +40,17 @@ Não executar builds antigos e novos simultaneamente: leitores antigos podem des
 ## Verificação
 
 Testes de domínio cobrem tarefas a partir de contatos, conclusão concorrente, escopos/perfis, preservação de legado, referências inválidas, ausência de baixa financeira, idempotência da simulação, pausa por suspensão, indisponibilidade de canal e revisão concorrente. Testes no navegador exercitam formulários, filtros/abas, persistência após recarga, linha do tempo, pausa e layouts desktop/mobile; os fluxos anteriores permanecem verificados.
+
+## Assistente flutuante
+
+O painel administrativo oferece o botão Assistente no canto inferior direito. O diálogo tem perguntas sugeridas conforme a rota, campo de dúvidas, atalhos e limpeza de conversa. A base local orienta sobre os fluxos implementados; não utiliza IA generativa, não consulta registros e não executa mutações. Perguntas não reconhecidas recebem uma mensagem de limite, sem respostas inventadas. A conversa fica somente na memória do painel, limitada às últimas 40 mensagens, e termina ao sair da sessão ou recarregar. Não há API externa nem chaves no frontend. Escape fecha o diálogo e devolve o foco ao botão; telas pequenas mantêm rolagem interna.
+
+## Central multicanal demonstrativa
+
+Conversas agrupa registros por contribuinte e empresa, com busca por nome/empresa/destino e filtro por canal. O painel mantém histórico cronológico dos três canais, com destino preservado, contrato, autor, assunto quando e-mail e estado escrito. O contexto apresenta acordos e a próxima tarefa pendente. Não existe atribuição de responsável por fila nesta etapa; o autor de cada mensagem é preservado.
+
+Preparar conversa permite WhatsApp, E-mail ou SMS. O canal pode ser trocado após salvar ou descartar o texto atual. Modelos de apresentação e retorno preenchem conteúdo editável. E-mail exige assunto de até 150 caracteres e endereço utilizável; WhatsApp exige número explicitamente cadastrado; SMS usa o telefone cadastrado, exige celular brasileiro e limita o texto a 160 caracteres nesta demonstração. Segmentação, codificação e custos de SMS dependem de integração futura. Preferência de contato é exibida, sem representar consentimento.
+
+Cada rascunho permite simular envio ou falha, por escolha explícita do operador. O registro é movido atomicamente para o histórico imutável de simulações; repetir a mesma solicitação reutiliza o resultado, sem duplicar mensagem. Não há entrega, leitura, resposta recebida, cobrança de provedor ou fallback automático. Falhas não são reenviadas automaticamente: o usuário precisa revisar e preparar outro rascunho. Não são criados atendimentos, tarefas nem recebimentos por simular. Financeiro consulta; Administrador/Operador operam com revalidação transacional de empresa, pessoa, contrato, destino e bloqueio/contestação/suspensão.
+
+Compatibilidade: channel e simulations são opcionais; conversas antigas sem canal continuam sendo WhatsApp, sem regravar a base durante a leitura. Novos rascunhos aceitam subject opcional, obrigatório somente em e-mail. A unicidade agora inclui empresa, pessoa, canal e destino. Histórico de destinos antigos permanece consultável; mutações exigem destino atual. Os schemas validam também os contratos das simulações. Não executar builds anteriores simultaneamente, pois podem descartar campos novos; antes de rollback, preservar cópia IndexedDB e retornar a uma base compatível. Nenhuma exclusão ou restauração é necessária para atualizar.

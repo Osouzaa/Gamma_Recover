@@ -1,4 +1,5 @@
 import { Logo } from '../../components/Logo';
+import { Assistant } from '../../components/Assistant';
 import { LogoutButton } from './LogoutButton';
 import { useEffect, useRef, useState } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
@@ -173,6 +174,7 @@ export function AdminLayout() {
           <Outlet />
         </S.Content>
       </S.Workspace>
+      <Assistant />
     </S.Shell>
   );
 }

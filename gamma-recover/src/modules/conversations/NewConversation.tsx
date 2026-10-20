@@ -5,7 +5,12 @@ import { useWorkspace } from '../../app/providers/Context';
 import { useAction } from '../../hooks/useDatabase';
 import { scopedDebts } from '../../services/operations';
 import { creditorOf } from '../../services/domain';
-import { contactDestination } from '../../services/contactChannels';
+import {
+  messageDestination,
+  messageChannels,
+  displayDestination,
+} from '../../services/messageChannels';
+import type { MessageChannel } from '../../types/conversations';
 import { ConversationService } from '../../services/conversations';
 import { Modal } from '../../components/Modal';
 import { Feedback } from '../../components/Feedback';
@@ -23,11 +28,12 @@ export function NewConversation({
 }) {
   const { scope } = useWorkspace();
   const action = useAction();
+  const [channel, setChannel] = useState<MessageChannel>('WhatsApp');
   const [debtId, setDebtId] = useState(initialDebtId);
   const debts = scopedDebts(db, scope);
   const debt = debts.find((d) => d.id === debtId);
   const debtor = db.debtors.find((d) => d.id === debt?.debtorId);
-  const destination = debtor ? contactDestination(debtor, 'WhatsApp') : '';
+  const destination = debtor ? messageDestination(debtor, channel) : '';
   const blocked =
     !debt ||
     !destination ||
@@ -36,19 +42,30 @@ export function NewConversation({
     isSuspended(debt) ||
     scope.role === 'Financeiro';
   return (
-    <Modal title="Preparar conversa de WhatsApp" onClose={onClose}>
+    <Modal title="Preparar conversa" onClose={onClose}>
       <Form
         onSubmit={(e) => {
           e.preventDefault();
-          action.mutate(() => ConversationService.open(scope, debtId), {
+          action.mutate(() => ConversationService.open(scope, debtId, channel), {
             onSuccess: (id) => onOpen(String(id)),
           });
         }}
       >
         <Alert>
-          API oficial da Meta ainda não conectada. Esta ação prepara uma conversa local; nenhuma
-          mensagem será enviada.
+          Conversa demonstrativa. Nenhum canal está conectado; nenhuma mensagem será enviada.
         </Alert>
+        <Field>
+          Canal de contato
+          <Select
+            aria-label="Canal de contato"
+            value={channel}
+            onChange={(e) => setChannel(e.target.value as MessageChannel)}
+          >
+            {messageChannels.map((value) => (
+              <option key={value}>{value}</option>
+            ))}
+          </Select>
+        </Field>
         <Field>
           Contrato do contribuinte
           <Select
@@ -68,13 +85,13 @@ export function NewConversation({
         </Field>
         {debtor && (
           <p>
-            {debtor.name} · WhatsApp:{' '}
-            {destination ? `+${destination}` : 'não cadastrado ou inválido'}
+            {debtor.name} · {channel}:{' '}
+            {destination ? displayDestination(channel, destination) : 'não cadastrado ou inválido'}
           </p>
         )}
         {blocked && debt && (
           <Alert $error>
-            Verifique o WhatsApp cadastrado, bloqueios, contestação e permissões antes de preparar a
+            Verifique o destino cadastrado, bloqueios, contestação e permissões antes de preparar a
             conversa.
           </Alert>
         )}

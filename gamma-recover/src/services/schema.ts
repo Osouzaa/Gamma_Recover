@@ -202,7 +202,7 @@ export const databaseSchema = z
     }
     const conversationKeys = new Set<string>();
     for (const c of db.conversations || []) {
-      const key = `${c.creditorId}:${c.debtorId}:${c.destination}`;
+      const key = `${c.creditorId}:${c.debtorId}:${c.channel ?? 'WhatsApp'}:${c.destination}`;
       if (conversationKeys.has(key)) issue('Conversa duplicada para empresa, pessoa e número.');
       conversationKeys.add(key);
       if (
@@ -219,7 +219,10 @@ export const databaseSchema = z
       )
         issue('Conversa sem contrato na empresa.');
       if (new Set(c.drafts.map((d) => d.id)).size !== c.drafts.length) issue('Rascunho duplicado.');
-      for (const draft of c.drafts) {
+      const messages = [...c.drafts, ...(c.simulations || [])];
+      if (new Set(messages.map((message) => message.id)).size !== messages.length)
+        issue('Mensagem duplicada na conversa.');
+      for (const draft of messages) {
         const debt = db.debts.find((d) => d.id === draft.debtId);
         if (
           !debt ||

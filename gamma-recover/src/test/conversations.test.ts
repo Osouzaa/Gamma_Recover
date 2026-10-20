@@ -124,3 +124,112 @@ it('accepts legacy databases and rejects orphan conversation references atomical
   expect(await demoAdapter.read()).toEqual(before);
   expect(adminReturnPath('/conversas?divida=dt-10')).toBe('/conversas?divida=dt-10');
 });
+
+it('separa canais, mantém histórico unificado possível e simula uma vez sem alterar finanças ou atendimentos', async () => {
+  await DebtorContactService.save(scope, 'dt-10', {
+    ...channels,
+    phone: '(11) 90000-0000',
+    email: 'pessoa@contribuinte.demo',
+  });
+  const before = await demoAdapter.read();
+  const whatsapp = await ConversationService.open(scope, 'dt-10');
+  const email = await ConversationService.open(scope, 'dt-10', 'E-mail');
+  const sms = await ConversationService.open(scope, 'dt-10', 'SMS');
+  expect(new Set([whatsapp, email, sms]).size).toBe(3);
+  expect(await ConversationService.open(scope, 'dt-10', 'SMS')).toBe(sms);
+  await expect(
+    ConversationService.saveDraft(scope, email, 'dt-10', 'Texto sem assunto.'),
+  ).rejects.toThrow('assunto');
+  await expect(ConversationService.saveDraft(scope, sms, 'dt-10', 'x'.repeat(161))).rejects.toThrow(
+    'limite',
+  );
+  await ConversationService.saveDraft(
+    scope,
+    email,
+    'dt-10',
+    'Texto de e-mail.',
+    undefined,
+    'Assunto demonstrativo',
+  );
+  await ConversationService.saveDraft(scope, sms, 'dt-10', 'Texto SMS.');
+  let db = await demoAdapter.read();
+  const draft = db.conversations!.find((c) => c.id === sms)!.drafts[0];
+  const results = await Promise.all([
+    ConversationService.simulate(scope, sms, draft.id, 'Envio simulado'),
+    ConversationService.simulate(scope, sms, draft.id, 'Envio simulado'),
+  ]);
+  expect(results[0]).toBe(results[1]);
+  db = await demoAdapter.read();
+  const conversation = db.conversations!.find((c) => c.id === sms)!;
+  expect(conversation.drafts).toHaveLength(0);
+  expect(conversation.simulations).toHaveLength(1);
+  expect(conversation.simulations![0].outcome).toBe('Envio simulado');
+  expect(conversation.simulations![0]).not.toHaveProperty('providerMessageId');
+  expect(db.debts).toEqual(before.debts);
+  expect(db.contacts).toEqual(before.contacts);
+  expect(db.installments).toEqual(before.installments);
+  expect(db.agreements).toEqual(before.agreements);
+  expect(db.tasks).toEqual(before.tasks);
+});
+
+it('revalida destino, perfil, contexto e bloqueios antes de simular sem gravação parcial', async () => {
+  await DebtorContactService.save(scope, 'dt-10', { ...channels, phone: '(11) 90000-0000' });
+  const sms = await ConversationService.open(scope, 'dt-10', 'SMS');
+  await ConversationService.saveDraft(scope, sms, 'dt-10', 'Mensagem demonstrativa.');
+  const draft = (await demoAdapter.read()).conversations![0].drafts[0];
+  let before = await demoAdapter.read();
+  await expect(
+    ConversationService.simulate({ ...scope, role: 'Financeiro' }, sms, draft.id, 'Envio simulado'),
+  ).rejects.toThrow('perfil');
+  await expect(
+    ConversationService.simulate({ ...scope, creditorId: 'cr-2' }, sms, draft.id, 'Envio simulado'),
+  ).rejects.toThrow('contexto');
+  expect(await demoAdapter.read()).toEqual(before);
+  await DebtorContactService.save(scope, 'dt-10', { ...channels, phone: '(31) 90000-0000' });
+  before = await demoAdapter.read();
+  await expect(
+    ConversationService.simulate(scope, sms, draft.id, 'Envio simulado'),
+  ).rejects.toThrow('alterado');
+  expect(await demoAdapter.read()).toEqual(before);
+  await DebtorContactService.save(scope, 'dt-10', { ...channels, phone: '(11) 90000-0000' });
+  await withDatabase('readwrite', (db) => {
+    db.debts[9].disputed = true;
+  });
+  before = await demoAdapter.read();
+  await expect(
+    ConversationService.simulate(scope, sms, draft.id, 'Falha simulada'),
+  ).rejects.toThrow('contestada');
+  expect(await demoAdapter.read()).toEqual(before);
+});
+
+it('preserva conversas legadas sem canal e valida vínculos das simulações', async () => {
+  const id = await ConversationService.open(scope, 'dt-10');
+  await ConversationService.saveDraft(scope, id, 'dt-10', 'Rascunho legado.');
+  await withDatabase('readwrite', (db) => {
+    delete db.conversations![0].channel;
+  });
+  const legacy = await demoAdapter.read();
+  expect(await ConversationService.open(scope, 'dt-10')).toBe(id);
+  const draft = legacy.conversations![0].drafts[0];
+  await ConversationService.simulate(scope, id, draft.id, 'Falha simulada');
+  const before = await demoAdapter.read();
+  expect(before.conversations![0].simulations![0].text).toBe(draft.text);
+  await expect(
+    withDatabase('readwrite', (db) => {
+      db.conversations![0].simulations![0].debtId = 'dt-11';
+    }),
+  ).rejects.toThrow('fora');
+  expect(await demoAdapter.read()).toEqual(before);
+});
+
+it('não aceita telefone fixo para SMS nem e-mail fictício reservado como destino', async () => {
+  await DebtorContactService.save(scope, 'dt-10', {
+    ...channels,
+    phone: '(11) 3000-0000',
+    email: 'pessoa@example.invalid',
+  });
+  const before = await demoAdapter.read();
+  await expect(ConversationService.open(scope, 'dt-10', 'SMS')).rejects.toThrow('destino');
+  await expect(ConversationService.open(scope, 'dt-10', 'E-mail')).rejects.toThrow('destino');
+  expect(await demoAdapter.read()).toEqual(before);
+});

@@ -1,3 +1,4 @@
+import { ContactLayout, HistoryLayout, ActionGroup, ProfileDetails } from './styles';
 import { DebtorLocationForm } from '../../DebtorLocationForm';
 import { locationLabel } from '../../../../services/location';
 import type { Debt } from '../../../../types/domain';
@@ -16,13 +17,11 @@ import { DataTable } from '../../../../components/DataTable';
 import { Feedback, ErrorState, LoadingState } from '../../../../components/Feedback';
 import {
   Button,
-  DetailList,
   Empty,
   PageHeader,
   Panel,
   PanelBody,
   PanelHeader,
-  Split,
   Stack,
   Status,
 } from '../../../../components/ui';
@@ -63,26 +62,22 @@ export default function DebtorDetail() {
             >
               {debtor.blocked ? 'Liberar operação' : 'Bloquear operação'}
             </Button>
-            <Link to={`/cobranca?devedor=${debtor.id}`}>Registrar atendimento →</Link>
+            <Button as={Link} $variant="primary" to={`/cobranca?devedor=${debtor.id}`}>
+              Registrar atendimento
+            </Button>
           </>
         }
       />
       <Stack>
         <Feedback error={action.error} />
-        <Split>
+        <ContactLayout>
           <Panel>
             <PanelHeader>
-              <h2>Canais do contribuinte</h2>
-              <Button
-                disabled={scope.role === 'Financeiro'}
-                onClick={() => setEditingContacts(true)}
-              >
-                Editar canais
-              </Button>
+              <h2>Cadastro e contato</h2>
               <Status>{debtor.blocked ? 'Bloqueado' : 'Liberado'}</Status>
             </PanelHeader>
             <PanelBody>
-              <DetailList>
+              <ProfileDetails>
                 <dt>Documento</dt>
                 <dd>{debtor.document}</dd>
                 <dt>Cidade / UF</dt>
@@ -93,13 +88,22 @@ export default function DebtorDetail() {
                     ? 'Contatos e negociações suspensos'
                     : 'Sem restrição operacional'}
                 </dd>
-              </DetailList>
-              <Button
-                disabled={scope.role === 'Financeiro'}
-                onClick={() => setEditingLocation(true)}
-              >
-                Editar localização
-              </Button>
+              </ProfileDetails>
+              <ActionGroup>
+                <Button
+                  disabled={scope.role === 'Financeiro'}
+                  onClick={() => setEditingLocation(true)}
+                >
+                  Editar localização
+                </Button>
+                <Button
+                  disabled={scope.role === 'Financeiro'}
+                  onClick={() => setEditingContacts(true)}
+                >
+                  Editar canais
+                </Button>
+              </ActionGroup>
+              <h3>Canais do contribuinte</h3>
               <ContactChannels
                 debtor={debtor}
                 debtId={debts.find((d) => !d.disputed && !isSuspended(d))?.id || debts[0].id}
@@ -117,7 +121,7 @@ export default function DebtorDetail() {
               <ContactTimeline contacts={contacts} />
             </PanelBody>
           </Panel>
-        </Split>
+        </ContactLayout>
         <Panel>
           <PanelHeader>
             <h2>Dívidas vinculadas</h2>
@@ -158,15 +162,19 @@ export default function DebtorDetail() {
                 key: 'actions',
                 label: 'Ações',
                 render: (d) => (
-                  <>
-                    {!isSuspended(d) && <Link to={`/negociacoes?divida=${d.id}`}>Negociar →</Link>}
+                  <ActionGroup>
+                    {!isSuspended(d) && (
+                      <Button as={Link} to={`/negociacoes?divida=${d.id}`}>
+                        Negociar
+                      </Button>
+                    )}
                     <Button
                       disabled={scope.role === 'Financeiro'}
                       onClick={() => setSuspensionDebt(d)}
                     >
                       {isSuspended(d) ? 'Retomar cobrança' : 'Suspender cobrança'}
                     </Button>
-                  </>
+                  </ActionGroup>
                 ),
               },
             ]}
@@ -205,7 +213,7 @@ export default function DebtorDetail() {
             ]}
           />
         </Panel>
-        <Split>
+        <HistoryLayout>
           <Panel>
             <PanelHeader>
               <h2>Acordos</h2>
@@ -243,7 +251,7 @@ export default function DebtorDetail() {
               ]}
             />
           </Panel>
-        </Split>
+        </HistoryLayout>
       </Stack>
       {suspensionDebt && (
         <DebtSuspensionDialog debt={suspensionDebt} onClose={() => setSuspensionDebt(undefined)} />

@@ -48,3 +48,8 @@ Transições limitadas a hover, bordas e recolhimento (140ms); respeitar prefers
 ## Referência aprovada: operação, indicadores, réguas e conversas
 
 Seguir `docs/padrao-operacional.md` nas próximas telas: identidade Gamma, navegação nomeada, faixas de indicadores, abas para contextos distintos, tabelas compactas com detalhes ao lado, etapas de réguas em sequência e conversa com contexto do contrato. Em mobile, reordenar em blocos legíveis, sem estreitar o texto até ficar ilegível. Funcionalidades não integradas permanecem identificadas como simulação/rascunho.
+
+## Ficha do contribuinte
+
+Cadastro e contato ficam agrupados, com edições lado a lado e canais separados dos dados cadastrais. Registrar atendimento é a ação primária do cabeçalho. O histórico usa altura natural e as colunas têm proporções distintas, sem painéis esticados. Ações por contrato usam grupo flexível com espaçamento; em telas pequenas, os dados passam a uma coluna. Links apresentados como botões preservam semântica de navegação e não recebem sublinhado.
+

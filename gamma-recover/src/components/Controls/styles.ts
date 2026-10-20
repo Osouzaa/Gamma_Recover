@@ -45,6 +45,7 @@ export const Button = styled.button<{ $variant?: 'primary' | 'danger' | 'ghost' 
   background: ${({ theme, $variant }) => ($variant === 'primary' ? theme.brand.accent : $variant === 'danger' ? theme.status.dangerBg : $variant === 'ghost' ? 'transparent' : theme.background.surface)};
   color: ${({ theme, $variant }) => ($variant === 'danger' ? theme.status.danger : theme.text.primary)};
   font-weight: 500;
+  text-decoration: none;
   white-space: nowrap;
   transition:
     background ${({ theme }) => theme.motion.fast},

@@ -11,6 +11,7 @@ export const ConversationWorkspace = styled.div`
 `;
 export const ChatLayout = styled.div`
   display: grid;
+  align-items: start;
   grid-template-columns: 250px minmax(0, 1fr);
   min-width: 0;
   gap: 16px;
@@ -75,6 +76,10 @@ export const DraftList = styled.ol`
   p {
     white-space: pre-wrap;
     margin: 8px 0;
+  }
+  li > span,
+  li > small {
+    display: block;
   }
   small {
     color: ${({ theme }) => theme.text.secondary};

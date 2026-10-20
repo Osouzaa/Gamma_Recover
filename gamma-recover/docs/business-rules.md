@@ -92,3 +92,7 @@ Ver `docs/dashboard-kpis.md` para fórmulas, limite de cinco anos, dimensões, c
 ## Padrão operacional de tarefas e réguas
 
 Ver `docs/padrao-operacional.md`: novas coleções opcionais tasks/journeys/journeyRuns; atendimentos novos preservam contrato/ator e agendamentos criam tarefa atomicamente; conclusão de tarefa não representa encerramento de cobrança nem pagamento; encerramento novo afeta apenas o contrato. Réguas são versionadas e suas simulações preservam resultados e motivos, sem execução de canais. Edição revalida a revisão e a simulação idempotente revalida elegibilidade. O dashboard usa abas e conversas mostram contexto lateral responsivo. Não preencher vínculos antigos artificialmente, não usar builds antigos simultaneamente e preservar cópia antes de rollback.
+
+## Conversas multicanal
+
+Ver a central multicanal em docs/padrao-operacional.md. Envios e falhas são simulações locais explicitamente escolhidas; não confirmam contato, entrega ou pagamento. O serviço revalida permissões, contexto e destino em cada mutação. Conversas antigas continuam válidas como WhatsApp; nenhum campo antigo é convertido destrutivamente.
