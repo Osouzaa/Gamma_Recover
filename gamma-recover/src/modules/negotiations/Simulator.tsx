@@ -1,4 +1,4 @@
-import { ProposalSummary } from './styles';
+import { ProposalSummary, SimulationLayout } from './styles';
 import { useState } from 'react';
 import type { Database, Proposal } from '../../types/domain';
 import type { Scope } from '../../services/store';
@@ -16,7 +16,6 @@ import {
   PanelBody,
   PanelHeader,
   Row,
-  Split,
   Stack,
 } from '../../components/ui';
 import { Feedback } from '../../components/Feedback';
@@ -26,8 +25,20 @@ interface Props {
   scope: Scope;
   initialProposal?: Proposal;
   onConfirmed?: (id: string) => void;
+  onReviewChange?: (reviewing: boolean) => void;
+  onUnsavedChange?: (unsaved: boolean) => void;
+  onHistory?: () => void;
 }
-export function Simulator({ db, debtId, scope, initialProposal, onConfirmed }: Props) {
+export function Simulator({
+  db,
+  debtId,
+  scope,
+  initialProposal,
+  onConfirmed,
+  onReviewChange,
+  onUnsavedChange,
+  onHistory,
+}: Props) {
   const action = useAction();
   const [discount, setDiscount] = useState(initialProposal?.discount ?? 10);
   const [entry, setEntry] = useState((initialProposal?.entry ?? 0) / 100);
@@ -51,10 +62,12 @@ export function Simulator({ db, debtId, scope, initialProposal, onConfirmed }: P
     setDraftId('');
     setAccepted(false);
     action.reset();
+    onUnsavedChange?.(true);
+    onReviewChange?.(false);
   };
   return (
-    <Split>
-      <Panel>
+    <SimulationLayout $reviewing={review}>
+      <Panel hidden={review}>
         <PanelHeader>
           <h2>Condições da proposta</h2>
         </PanelHeader>
@@ -72,7 +85,13 @@ export function Simulator({ db, debtId, scope, initialProposal, onConfirmed }: P
                       Math.round(entry * 100),
                       count,
                     ),
-                  { onSuccess: (r) => setDraftId((r as Proposal).id) },
+                  {
+                    onSuccess: (r) => {
+                      setDraftId((r as Proposal).id);
+                      onUnsavedChange?.(false);
+                      onReviewChange?.(true);
+                    },
+                  },
                 );
             }}
           >
@@ -85,6 +104,7 @@ export function Simulator({ db, debtId, scope, initialProposal, onConfirmed }: P
             <Field>
               Desconto (%)
               <Input
+                disabled={action.isPending}
                 type="number"
                 min="0"
                 max={policy.maxDiscount}
@@ -100,6 +120,7 @@ export function Simulator({ db, debtId, scope, initialProposal, onConfirmed }: P
             <Field>
               Entrada (R$)
               <Input
+                disabled={action.isPending}
                 type="number"
                 min="0"
                 step="0.01"
@@ -114,6 +135,7 @@ export function Simulator({ db, debtId, scope, initialProposal, onConfirmed }: P
             <Field>
               Parcelas após a entrada
               <Input
+                disabled={action.isPending}
                 type="number"
                 min="1"
                 max={policy.maxInstallments}
@@ -130,7 +152,11 @@ export function Simulator({ db, debtId, scope, initialProposal, onConfirmed }: P
                 {error}
               </Alert>
             )}
-            <Button disabled={!calculation || action.isPending || review} type="submit">
+            <Button
+              $variant="primary"
+              disabled={!calculation || action.isPending || review}
+              type="submit"
+            >
               Revisar proposta
             </Button>
           </Form>
@@ -170,10 +196,13 @@ export function Simulator({ db, debtId, scope, initialProposal, onConfirmed }: P
               parcelas demonstrativos, sem recebimento automático.
             </Alert>
             {waiting ? (
-              <Alert role="status">
-                Proposta salva e aguardando aprovação do administrador. A aprovação respeita o
-                desconto máximo da política.
-              </Alert>
+              <Stack>
+                <Alert role="status">
+                  Proposta salva e aguardando aprovação do administrador. A aprovação respeita o
+                  desconto máximo da política.
+                </Alert>
+                {onHistory && <Button onClick={onHistory}>Ver propostas para aprovação</Button>}
+              </Stack>
             ) : (
               review && (
                 <>
@@ -214,10 +243,15 @@ export function Simulator({ db, debtId, scope, initialProposal, onConfirmed }: P
                 </>
               )
             )}
+            {review && (
+              <Button type="button" disabled={action.isPending} onClick={change}>
+                Alterar condições
+              </Button>
+            )}
             <Feedback error={action.error} />
           </Stack>
         </PanelBody>
       </Panel>
-    </Split>
+    </SimulationLayout>
   );
 }

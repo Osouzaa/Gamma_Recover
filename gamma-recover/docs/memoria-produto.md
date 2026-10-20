@@ -31,6 +31,8 @@ Conversas permite somente rascunhos locais. O usuário escolheu a API oficial da
 
 ## Direção de design
 
+Negociações: fluxo aprovado de três etapas — Escolher contrato, Montar proposta e Confirmar acordo — com histórico em aba separada. Acesso pela cobrança já leva o contrato selecionado. Preservar aprovação excepcional, revisão e aceite explícito; a confirmação do acordo não é recebimento.
+
 Operação de cobrança: o usuário relatou dificuldade em entender a tabela seguida de detalhes e botões. A direção passa a ser fila lateral e um caso por vez, com ação principal de registrar atendimento e abas Contato/Histórico/Tarefas. Manter a proteção de texto não salvo e os vínculos por contrato. Ver o comportamento em `docs/padrao-operacional.md`.
 
 Identidade Gamma, cores e componentes estão coerentes nas telas revisadas; a experiência completa ainda precisa de revisão no fluxo real de trabalho.

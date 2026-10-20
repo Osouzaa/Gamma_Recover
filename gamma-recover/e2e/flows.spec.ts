@@ -118,9 +118,11 @@ test('todas as telas administrativas e viewport móvel sem overflow global', asy
 test('aprovação excepcional, administração, campanhas e exportação', async ({ page }) => {
   await page.goto('/negociacoes');
   await page.getByLabel('Dívida para negociação').selectOption('dt-10');
+  await page.getByRole('button', { name: 'Continuar negociação', exact: true }).click();
   await page.getByLabel('Desconto (%)').fill('25');
   await page.getByRole('button', { name: 'Revisar proposta' }).click();
   await expect(page.getByRole('status')).toContainText('aguardando aprovação');
+  await page.getByRole('button', { name: 'Ver propostas para aprovação', exact: true }).click();
   await page.getByRole('button', { name: 'Aprovar proposta' }).click();
   await expect(page.getByRole('status')).toContainText('Proposta aprovada');
   await page.getByRole('button', { name: 'Retomar proposta' }).click();

@@ -43,6 +43,14 @@ O histórico preserva data, ator, revisão e resultado por contrato/etapa, inclu
 
 Não executar builds antigos e novos simultaneamente: leitores antigos podem descartar campos desconhecidos ao gravar. Preservar cópia IndexedDB antes de qualquer rollback. Não é necessário restaurar a demonstração; os novos módulos iniciam vazios e podem ser preenchidos pela interface.
 
+## Negociação em etapas
+
+A aba **Nova negociação** conduz por Escolher contrato, Montar proposta e Confirmar acordo. Ao abrir pelo contrato na cobrança, a escolha já está feita e o fluxo começa nas condições. Um contrato indicado no link que não esteja elegível não é substituído silenciosamente; a tela permite escolher outro.
+
+O operador ajusta desconto, entrada e parcelas com resumo calculado pelo serviço de domínio. Revisar proposta salva as condições e abre a confirmação, ocultando os campos de edição. Alterar condições volta à montagem e exige nova revisão e novo aceite. A confirmação só fica disponível com aceite explícito; propostas acima do limite automático aguardam aprovação e oferecem acesso ao histórico. Aprovação, política máxima, bloqueios e criação do acordo permanecem nos serviços existentes.
+
+O **Histórico de propostas** fica em aba separada, com aprovação e retomada. Retomar abre a proposta salva na confirmação e reinicia o aceite, inclusive ao retomar a mesma proposta. Financeiro consulta o histórico. Alternar abas ou voltar à escolha preserva as condições; trocar efetivamente o contrato, retomar outra proposta, trocar a empresa ou sair com condições não revisadas exige confirmação de descarte. Revisões já salvas continuam no histórico. A formalização abre Acordos e não confirma recebimentos.
+
 ## Verificação
 
 Testes de domínio cobrem tarefas a partir de contatos, conclusão concorrente, escopos/perfis, preservação de legado, referências inválidas, ausência de baixa financeira, idempotência da simulação, pausa por suspensão, indisponibilidade de canal e revisão concorrente. Testes no navegador exercitam formulários, filtros/abas, persistência após recarga, linha do tempo, pausa e layouts desktop/mobile; os fluxos anteriores permanecem verificados.

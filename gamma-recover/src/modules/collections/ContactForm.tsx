@@ -1,5 +1,4 @@
-import { useEffect } from 'react';
-import { useBlocker, useBeforeUnload } from 'react-router-dom';
+import { useUnsavedChanges } from '../../hooks/useUnsavedChanges';
 import { contactChannels, contactDestination } from '../../services/contactChannels';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -173,27 +172,6 @@ export function ContactForm({
 }
 
 function DraftGuard({ dirty }: { dirty: boolean }) {
-  const { guardCreditorChange } = useWorkspace();
-  useEffect(
-    () =>
-      guardCreditorChange(
-        () =>
-          !dirty || window.confirm('Descartar o atendimento ainda não salvo e trocar a empresa?'),
-      ),
-    [dirty, guardCreditorChange],
-  );
-  const blocker = useBlocker(dirty);
-  useEffect(() => {
-    if (blocker.state !== 'blocked') return;
-    if (window.confirm('Descartar o atendimento ainda não salvo e sair desta ficha?'))
-      blocker.proceed();
-    else blocker.reset();
-  }, [blocker]);
-  useBeforeUnload((event) => {
-    if (dirty) {
-      event.preventDefault();
-      event.returnValue = '';
-    }
-  });
+  useUnsavedChanges(dirty, 'Descartar o atendimento ainda não salvo e sair desta ficha?');
   return null;
 }
