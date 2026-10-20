@@ -12,6 +12,9 @@ export const agreementStatus = (db: Database, agreement: Agreement) => {
 };
 export const activeAgreement = (db: Database, debtId: string) =>
   db.agreements.find((a) => a.debtId === debtId && !a.cancelled);
+export const isSuspended = (debt: Debt) => debt.suspensionHistory?.at(-1)?.suspended === true;
+export const contactBlocked = (db: Database, debt: Debt) =>
+  !!db.debtors.find((d) => d.id === debt.debtorId)?.blocked || debt.disputed || isSuspended(debt);
 export function simulate(
   amount: number,
   discount: number,
@@ -50,8 +53,7 @@ export function prepareProposal(
 ): Proposal {
   const debt = db.debts.find((d) => d.id === debtId);
   if (!debt) throw new Error('Dívida não encontrada.');
-  if (db.debtors.find((d) => d.id === debt.debtorId)?.blocked || debt.disputed)
-    throw new Error('Dívida bloqueada para negociação.');
+  if (contactBlocked(db, debt)) throw new Error('Dívida bloqueada para negociação.');
   if (!db.portfolios.find((p) => p.id === debt.portfolioId)?.active)
     throw new Error('Carteira inativa.');
   if (activeAgreement(db, debtId)) throw new Error('Esta dívida já possui acordo.');
@@ -148,9 +150,8 @@ export function metrics(db: Database, creditorId = '', start = '', end = today()
     eligible: debts
       .filter(
         (d) =>
-          !d.disputed &&
+          !contactBlocked(db, d) &&
           !activeAgreement(db, d.id) &&
-          !db.debtors.find((v) => v.id === d.debtorId)?.blocked &&
           db.portfolios.find((p) => p.id === d.portfolioId)?.active,
       )
       .reduce((s, d) => s + d.amount, 0),

@@ -1,3 +1,6 @@
+import type { Journey, JourneyRun } from '../services/journeySchema';
+import type { Task } from '../services/taskSchema';
+import type { Location } from '../services/location';
 import type { Conversation } from './conversations';
 import type { ContactChannel } from '../services/contactChannels';
 import type { CompanyProfile } from '../services/companySchema';
@@ -31,6 +34,7 @@ export interface Debtor {
   whatsapp?: string;
   preferredChannel?: ContactChannel;
   blocked: boolean;
+  location?: Location;
 }
 export interface Debt {
   id: string;
@@ -40,8 +44,16 @@ export interface Debt {
   amount: number;
   dueDate: string;
   disputed: boolean;
+  suspensionHistory?: {
+    suspended: boolean;
+    reason: string;
+    actor: string;
+    date: string;
+  }[];
 }
 export interface Contact {
+  debtId?: string;
+  actor?: string;
   id: string;
   debtorId: string;
   creditorId: string;
@@ -131,5 +143,8 @@ export interface Database {
   imports: ImportRecord[];
   disputes: Dispute[];
   conversations?: Conversation[];
+  tasks?: Task[];
+  journeys?: Journey[];
+  journeyRuns?: JourneyRun[];
   settings: { operatorName: string; role: Role; returnDays: number };
 }

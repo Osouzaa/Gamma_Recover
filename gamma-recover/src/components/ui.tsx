@@ -170,3 +170,13 @@ export const DetailList = styled.dl`
     overflow-wrap: anywhere;
   }
 `;
+export const ContextDetails = styled(DetailList)`
+  grid-template-columns: minmax(0, 1fr);
+  gap: 4px;
+  dt {
+    font-size: ${({ theme }) => theme.typography.small};
+  }
+  dd {
+    margin-bottom: 10px;
+  }
+`;

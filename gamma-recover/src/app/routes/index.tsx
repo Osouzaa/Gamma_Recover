@@ -15,6 +15,8 @@ const Collections = lazy(() => import('../../modules/collections/pages/Collectio
 const Negotiations = lazy(() => import('../../modules/negotiations/pages/Negotiations'));
 const Agreements = lazy(() => import('../../modules/agreements/pages/Agreements'));
 const Financial = lazy(() => import('../../modules/financial/pages/Financial'));
+const Tasks = lazy(() => import('../../modules/tasks/Tasks'));
+const Journeys = lazy(() => import('../../modules/journeys/Journeys'));
 const Campaigns = lazy(() => import('../../modules/campaigns/pages/Campaigns'));
 const Reports = lazy(() => import('../../modules/reports/pages/Reports'));
 const Settings = lazy(() => import('../../modules/settings/pages/Settings'));
@@ -56,6 +58,8 @@ export const router = createBrowserRouter([
               { path: 'negociacoes', element: <Negotiations /> },
               { path: 'acordos', element: <Agreements /> },
               { path: 'financeiro', element: <Financial /> },
+              { path: 'tarefas', element: <Tasks /> },
+              { path: 'reguas', element: <Journeys /> },
               { path: 'campanhas', element: <Campaigns /> },
               { path: 'relatorios', element: <Reports /> },
               { path: 'configuracoes', element: <Settings /> },

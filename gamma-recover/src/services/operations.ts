@@ -1,7 +1,8 @@
+import { appendTask } from './tasks';
 import { z } from 'zod';
 import { attendanceChannelSchema, contactDestination } from './contactChannels';
 import type { Database } from '../types/domain';
-import { activeAgreement, createAgreement, prepareProposal } from './domain';
+import { activeAgreement, contactBlocked, createAgreement, prepareProposal } from './domain';
 import { requireDebt, requireRole, transact, type Scope } from './store';
 import { id, today } from '../utils/format';
 const name = z.string().trim().min(3, 'Informe pelo menos 3 caracteres.').max(100);
@@ -77,12 +78,8 @@ export const CollectionService = {
       requireRole(scope, ['Administrador', 'Operador'], db);
       const v = contactSchema.parse(values);
       const debt = requireDebt(db, scope, v.debtId);
-      if (
-        debt.debtorId !== v.debtorId ||
-        db.debtors.find((d) => d.id === v.debtorId)?.blocked ||
-        debt.disputed
-      )
-        throw new Error('Devedor bloqueado ou dívida contestada.');
+      if (debt.debtorId !== v.debtorId || contactBlocked(db, debt))
+        throw new Error('Devedor bloqueado ou dívida contestada/suspensa.');
       const creditorId = db.portfolios.find((p) => p.id === debt.portfolioId)!.creditorId;
       const channel = v.channel || 'Registro interno';
       const debtor = db.debtors.find((d) => d.id === v.debtorId)!;
@@ -90,8 +87,11 @@ export const CollectionService = {
         channel === 'Registro interno' ? undefined : contactDestination(debtor, channel);
       if (channel !== 'Registro interno' && !destination)
         throw new Error('Canal indisponível. Revise os dados de contato.');
+      const contactId = id('ct');
       db.contacts.unshift({
-        id: id('ct'),
+        id: contactId,
+        debtId: debt.id,
+        actor: db.settings.operatorName,
         channel,
         destination: destination || undefined,
         debtorId: v.debtorId,
@@ -103,6 +103,12 @@ export const CollectionService = {
         promiseAmount: v.promiseAmount || undefined,
         closed: v.result === 'Encerrado',
       });
+      if (v.nextDate && (v.result === 'Retorno agendado' || v.result === 'Promessa de pagamento'))
+        appendTask(
+          db,
+          { debtId: debt.id, title: `${v.result}: ${v.note}`.slice(0, 200), dueDate: v.nextDate },
+          contactId,
+        );
     });
   },
 };
@@ -208,9 +214,8 @@ export const CampaignService = {
         .filter(
           (d) =>
             db.portfolios.find((p) => p.id === d.portfolioId)?.creditorId === values.creditorId &&
-            !d.disputed &&
+            !contactBlocked(db, d) &&
             !activeAgreement(db, d.id) &&
-            !db.debtors.find((v) => v.id === d.debtorId)?.blocked &&
             Math.floor((Date.parse(today()) - Date.parse(d.dueDate)) / 86400000) >= values.minDays,
         )
         .map((d) => d.id);
@@ -230,6 +235,14 @@ export const CampaignService = {
       if (!c || (scope.creditorId && c.creditorId !== scope.creditorId))
         throw new Error('Campanha indisponível.');
       if (c.status !== 'Rascunho') throw new Error('Campanha já processada.');
+      c.audience = c.audience.filter((debtId) => {
+        const debt = requireDebt(db, { ...scope, creditorId: c.creditorId }, debtId);
+        return (
+          !contactBlocked(db, debt) &&
+          !activeAgreement(db, debt.id) &&
+          db.portfolios.find((p) => p.id === debt.portfolioId)?.active
+        );
+      });
       c.status = 'Simulada';
     });
   },

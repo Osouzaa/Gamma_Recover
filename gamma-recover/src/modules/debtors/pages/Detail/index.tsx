@@ -1,3 +1,7 @@
+import { DebtorLocationForm } from '../../DebtorLocationForm';
+import { locationLabel } from '../../../../services/location';
+import type { Debt } from '../../../../types/domain';
+import { DebtSuspensionDialog } from '../../DebtSuspensionDialog';
 import { useState } from 'react';
 import { ContactChannels } from '../../../../components/ContactChannels';
 import { DebtorContactForm } from '../../DebtorContactForm';
@@ -6,7 +10,7 @@ import { Link, useParams } from 'react-router-dom';
 import { useWorkspace } from '../../../../app/providers/Context';
 import { useAction, useDatabase } from '../../../../hooks/useDatabase';
 import { DebtorService, scopedDebts } from '../../../../services/operations';
-import { agreementStatus } from '../../../../services/domain';
+import { agreementStatus, isSuspended } from '../../../../services/domain';
 import { date, money } from '../../../../utils/format';
 import { DataTable } from '../../../../components/DataTable';
 import { Feedback, ErrorState, LoadingState } from '../../../../components/Feedback';
@@ -24,6 +28,8 @@ import {
 } from '../../../../components/ui';
 export default function DebtorDetail() {
   const { debtorId } = useParams();
+  const [suspensionDebt, setSuspensionDebt] = useState<Debt>();
+  const [editingLocation, setEditingLocation] = useState(false);
   const [editingContacts, setEditingContacts] = useState(false);
   const { scope } = useWorkspace();
   const { data: db, isLoading, refetch } = useDatabase();
@@ -79,6 +85,8 @@ export default function DebtorDetail() {
               <DetailList>
                 <dt>Documento</dt>
                 <dd>{debtor.document}</dd>
+                <dt>Cidade / UF</dt>
+                <dd>{locationLabel(debtor.location)}</dd>
                 <dt>Bloqueio</dt>
                 <dd>
                   {debtor.blocked
@@ -86,10 +94,18 @@ export default function DebtorDetail() {
                     : 'Sem restrição operacional'}
                 </dd>
               </DetailList>
+              <Button
+                disabled={scope.role === 'Financeiro'}
+                onClick={() => setEditingLocation(true)}
+              >
+                Editar localização
+              </Button>
               <ContactChannels
                 debtor={debtor}
-                debtId={debts.find((d) => !d.disputed)?.id || debts[0].id}
-                disabled={scope.role === 'Financeiro' || debts.every((d) => d.disputed)}
+                debtId={debts.find((d) => !d.disputed && !isSuspended(d))?.id || debts[0].id}
+                disabled={
+                  scope.role === 'Financeiro' || debts.every((d) => d.disputed || isSuspended(d))
+                }
               />
             </PanelBody>
           </Panel>
@@ -128,19 +144,64 @@ export default function DebtorDetail() {
                 label: 'Situação',
                 render: (d) => (
                   <Status>
-                    {d.disputed
-                      ? 'Contestada'
-                      : agreements.some((a) => a.debtId === d.id && !a.cancelled)
-                        ? 'Com acordo'
-                        : 'Disponível'}
+                    {isSuspended(d)
+                      ? 'Cobrança suspensa'
+                      : d.disputed
+                        ? 'Contestada'
+                        : agreements.some((a) => a.debtId === d.id && !a.cancelled)
+                          ? 'Com acordo'
+                          : 'Disponível'}
                   </Status>
                 ),
               },
               {
                 key: 'actions',
                 label: 'Ações',
-                render: (d) => <Link to={`/negociacoes?divida=${d.id}`}>Negociar →</Link>,
+                render: (d) => (
+                  <>
+                    {!isSuspended(d) && <Link to={`/negociacoes?divida=${d.id}`}>Negociar →</Link>}
+                    <Button
+                      disabled={scope.role === 'Financeiro'}
+                      onClick={() => setSuspensionDebt(d)}
+                    >
+                      {isSuspended(d) ? 'Retomar cobrança' : 'Suspender cobrança'}
+                    </Button>
+                  </>
+                ),
               },
+            ]}
+          />
+        </Panel>
+        <Panel>
+          <PanelHeader>
+            <h2>Histórico de suspensão por contrato</h2>
+          </PanelHeader>
+          <DataTable
+            rows={debts
+              .flatMap((d) =>
+                (d.suspensionHistory || []).map((event, index) => ({
+                  ...event,
+                  reference: d.reference,
+                  key: `${d.id}-${index}`,
+                })),
+              )
+              .sort((a, b) => b.date.localeCompare(a.date))}
+            rowKey={(event) => event.key}
+            columns={[
+              { key: 'contract', label: 'Contrato', render: (event) => event.reference },
+              {
+                key: 'date',
+                label: 'Data',
+                render: (event) =>
+                  new Date(event.date).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }),
+              },
+              {
+                key: 'state',
+                label: 'Ação',
+                render: (event) => (event.suspended ? 'Suspensão' : 'Retomada'),
+              },
+              { key: 'reason', label: 'Motivo', render: (event) => event.reason },
+              { key: 'actor', label: 'Responsável', render: (event) => event.actor },
             ]}
           />
         </Panel>
@@ -184,6 +245,16 @@ export default function DebtorDetail() {
           </Panel>
         </Split>
       </Stack>
+      {suspensionDebt && (
+        <DebtSuspensionDialog debt={suspensionDebt} onClose={() => setSuspensionDebt(undefined)} />
+      )}
+      {editingLocation && (
+        <DebtorLocationForm
+          debtor={debtor}
+          debtId={debts[0].id}
+          onClose={() => setEditingLocation(false)}
+        />
+      )}
       {editingContacts && (
         <DebtorContactForm
           debtor={debtor}

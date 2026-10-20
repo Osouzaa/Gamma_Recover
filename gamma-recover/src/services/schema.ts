@@ -1,3 +1,6 @@
+import { journeySchema, journeyRunSchema } from './journeySchema';
+import { taskSchema } from './taskSchema';
+import { locationSchema } from './location';
 import { conversationSchema } from './conversationSchema';
 import { z } from 'zod';
 import { attendanceChannelSchema, contactChannels } from './contactChannels';
@@ -36,6 +39,7 @@ export const databaseSchema = z
         whatsapp: z.string().optional(),
         preferredChannel: z.enum(contactChannels).optional(),
         blocked: z.boolean(),
+        location: locationSchema.optional(),
       }),
     ),
     debts: z.array(
@@ -47,10 +51,22 @@ export const databaseSchema = z
         amount,
         dueDate: date,
         disputed: z.boolean(),
+        suspensionHistory: z
+          .array(
+            z.object({
+              suspended: z.boolean(),
+              reason: z.string().trim().min(5).max(2000),
+              actor: text,
+              date: z.iso.datetime(),
+            }),
+          )
+          .optional(),
       }),
     ),
     contacts: z.array(
       z.object({
+        debtId: text.optional(),
+        actor: text.optional(),
         id: text,
         debtorId: text,
         creditorId: text,
@@ -134,6 +150,9 @@ export const databaseSchema = z
     ),
     disputes: z.array(z.object({ id: text, debtId: text, reason: text, date: text })),
     conversations: z.array(conversationSchema).optional(),
+    tasks: z.array(taskSchema).optional(),
+    journeys: z.array(journeySchema).optional(),
+    journeyRuns: z.array(journeyRunSchema).optional(),
     settings: z.object({
       operatorName: text,
       role: z.enum(['Administrador', 'Operador', 'Financeiro']),
@@ -145,6 +164,41 @@ export const databaseSchema = z
     for (const [key, value] of Object.entries(db)) {
       if (Array.isArray(value) && new Set(value.map((v) => v.id)).size !== value.length)
         issue(`IDs duplicados: ${key}`);
+    }
+    for (const contact of db.contacts) {
+      if (!contact.debtId) continue;
+      const debt = db.debts.find((d) => d.id === contact.debtId);
+      if (
+        !debt ||
+        debt.debtorId !== contact.debtorId ||
+        !db.portfolios.some((p) => p.id === debt.portfolioId && p.creditorId === contact.creditorId)
+      )
+        issue('Atendimento fora do contrato/credor.');
+    }
+    for (const task of db.tasks || []) {
+      if (!db.debts.some((d) => d.id === task.debtId)) issue('Tarefa sem contrato.');
+      if (
+        task.sourceContactId &&
+        !db.contacts.some((c) => c.id === task.sourceContactId && c.debtId === task.debtId)
+      )
+        issue('Tarefa sem atendimento de origem válido.');
+    }
+    for (const journey of db.journeys || []) {
+      if (!db.creditors.some((c) => c.id === journey.creditorId)) issue('Régua sem empresa.');
+    }
+    for (const run of db.journeyRuns || []) {
+      const journey = db.journeys?.find((j) => j.id === run.journeyId);
+      if (!journey || run.revision > journey.revision) issue('Simulação sem régua/revisão válida.');
+      for (const result of run.results) {
+        const debt = db.debts.find((d) => d.id === result.debtId);
+        if (
+          !debt ||
+          !db.portfolios.some(
+            (p) => p.id === debt.portfolioId && p.creditorId === journey?.creditorId,
+          )
+        )
+          issue('Simulação fora da empresa.');
+      }
     }
     const conversationKeys = new Set<string>();
     for (const c of db.conversations || []) {

@@ -1,3 +1,4 @@
+import { locationKey, locationSchema, type Location } from './location';
 import { z } from 'zod';
 import {
   contactPhoneSchema,
@@ -17,6 +18,7 @@ export interface ImportRow {
   phone?: string;
   whatsapp?: string;
   email?: string;
+  location?: Location;
 }
 const rowSchema = z.object({
   document: z.string().regex(/^DEMO-[A-Za-z0-9-]+$/, 'Use identificador fictício DEMO-...'),
@@ -27,6 +29,7 @@ const rowSchema = z.object({
   phone: contactPhoneSchema.optional(),
   whatsapp: contactPhoneSchema.optional(),
   email: contactEmailSchema.optional(),
+  location: locationSchema.optional(),
 });
 export function parseCSV(text: string): { rows: ImportRow[]; errors: string[] } {
   if (text.length > 1000000) return { rows: [], errors: ['Arquivo excede 1 MB.'] };
@@ -57,8 +60,10 @@ export function parseCSV(text: string): { rows: ImportRow[]; errors: string[] } 
   record.push(value);
   if (record.some((v) => v.trim())) records.push(record);
   const header = records.shift()?.join(';').trim();
+  const withLocation =
+    header === 'documento;nome;contrato;valor;vencimento;telefone;whatsapp;email;cidade;uf';
   const withChannels =
-    header === 'documento;nome;contrato;valor;vencimento;telefone;whatsapp;email';
+    withLocation || header === 'documento;nome;contrato;valor;vencimento;telefone;whatsapp;email';
   if (!withChannels && header !== 'documento;nome;contrato;valor;vencimento')
     return {
       rows: [],
@@ -77,11 +82,14 @@ export function parseCSV(text: string): { rows: ImportRow[]; errors: string[] } 
       reference: r[2]?.trim(),
       amount,
       dueDate: r[4]?.trim(),
+      ...(withLocation && (r[8]?.trim() || r[9]?.trim())
+        ? { location: { city: r[8]?.trim(), state: r[9]?.trim().toUpperCase() } }
+        : {}),
       ...(withChannels ? { phone: r[5]?.trim(), whatsapp: r[6]?.trim(), email: r[7]?.trim() } : {}),
     });
-    if (r.length !== (withChannels ? 8 : 5) || !result.success) {
+    if (r.length !== (withLocation ? 10 : withChannels ? 8 : 5) || !result.success) {
       errors.push(
-        `Linha ${i + 2}: ${result.success ? `esperadas ${withChannels ? 8 : 5} colunas` : result.error.issues.map((e) => e.message).join('; ')}`,
+        `Linha ${i + 2}: ${result.success ? `esperadas ${withLocation ? 10 : withChannels ? 8 : 5} colunas` : result.error.issues.map((e) => e.message).join('; ')}`,
       );
     } else if (references.has(result.data.reference))
       errors.push(`Linha ${i + 2}: contrato duplicado no arquivo.`);
@@ -128,6 +136,13 @@ export const ImportService = {
             blocked: false,
           };
           db.debtors.push(debtor);
+        }
+        if (row.location) {
+          if (debtor.location && locationKey(debtor.location) !== locationKey(row.location))
+            throw new Error(
+              `Localização divergente para ${row.document}. Revise o cadastro antes de importar.`,
+            );
+          if (!debtor.location) debtor.location = row.location;
         }
         const fields: [ContactChannel, 'phone' | 'whatsapp' | 'email'][] = [
           ['Telefone', 'phone'],

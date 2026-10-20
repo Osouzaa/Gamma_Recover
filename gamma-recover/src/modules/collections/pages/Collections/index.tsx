@@ -1,3 +1,4 @@
+import { collectionQueue } from '../../../../services/collectionQueue';
 import { ContactChannels } from '../../../../components/ContactChannels';
 import { DebtorContactForm } from '../../../debtors/DebtorContactForm';
 import { ContactTimeline } from '../../../../components/ContactTimeline';
@@ -6,7 +7,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { useDatabase } from '../../../../hooks/useDatabase';
 import { useWorkspace } from '../../../../app/providers/Context';
 import { scopedDebts } from '../../../../services/operations';
-import { activeAgreement, creditorOf } from '../../../../services/domain';
+import { creditorOf, isSuspended } from '../../../../services/domain';
 import { date, money } from '../../../../utils/format';
 import { DataTable } from '../../../../components/DataTable';
 import { Feedback, ErrorState, LoadingState } from '../../../../components/Feedback';
@@ -37,16 +38,11 @@ export default function Collections() {
   const { scope } = useWorkspace();
   if (isLoading) return <LoadingState />;
   if (!db) return <ErrorState retry={refetch} />;
-  const queue = scopedDebts(db, scope).filter(
-    (d) =>
-      !activeAgreement(db, d.id) &&
-      db.debtors
-        .find((v) => v.id === d.debtorId)
-        ?.name.toLowerCase()
-        .includes(search.toLowerCase()) &&
-      !db.contacts.some(
-        (c) => c.debtorId === d.debtorId && c.creditorId === creditorOf(db, d) && c.closed,
-      ),
+  const queue = collectionQueue(db, scope).filter((d) =>
+    db.debtors
+      .find((v) => v.id === d.debtorId)
+      ?.name.toLowerCase()
+      .includes(search.toLowerCase()),
   );
   const selected =
     queue.find((d) => d.id === debtId) ||
@@ -208,6 +204,7 @@ export default function Collections() {
           disabled={
             scope.role === 'Financeiro' ||
             contactDebt.disputed ||
+            isSuspended(contactDebt) ||
             !!db.debtors.find((d) => d.id === contactDebt.debtorId)?.blocked
           }
           onClose={() => setContactId('')}

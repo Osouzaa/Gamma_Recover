@@ -73,3 +73,22 @@ O contrato de serviços descreve a contratação da Gamma. Vigência e condiçõ
 Administrador e Operador podem atualizar os canais de uma pessoa a partir de uma dívida válida no contexto. O telefone deve ter DDD brasileiro; WhatsApp requer cadastro explícito. O canal preferencial deve ter destino utilizável. Preferência não é confirmação de titularidade, consentimento ou entrega. O perfil Financeiro consulta os dados, sem iniciar contato nem editar canais. Um bloqueio impede contato, mas permite corrigir o cadastro.
 
 Atendimento por WhatsApp, Telefone ou E-mail exige destino utilizável na transação e continua sujeito a bloqueios e contestação. O destino é copiado para o histórico, preservando a tentativa mesmo se o cadastro for alterado posteriormente. O resultado é declarado manualmente pela equipe. Abrir o aplicativo não confirma contato, envio, leitura, promessa ou recebimento. Registros internos não atribuem canal externo; registros legados não recebem canal inferido.
+
+
+## Suspensão por contrato
+
+`services/debtSuspension.ts` registra suspensão e retomada transacionais, com motivo, autor, data e revalidação do estado para evitar confirmação duplicada. `Debt.suspensionHistory` é opcional; a última ocorrência define a suspensão. Administrador/Operador podem alterar somente contratos no contexto. Contatos, conversas e negociação revalidam a restriééo no serviéo; fila, saldo elegível e campanhas a respeitam. Campanhas revalidam o público ao simular. Acordos e recebimentos existentes são preservados. Retomar não remove outras restrições. O histórico está no cadastro do devedor.
+
+Não operar builds antigos e atuais simultaneamente; preservar cópia IndexedDB antes de rollback. A análise do estudo e próximos critérios estão em `docs/estudo-mercado-gap-analysis.md`.
+
+
+## Análise de carteira e localização
+
+`services/portfolioAnalytics.ts` calcula a posição atual por dívida/parcela, faixas de atraso, vencimentos e cidade. A visão consolidada evita dupla contagem, mantém os bloqueios como restrições operacionais e exclui parcelas de acordos cancelados/rompidos. É somente leitura; filtros e exportação usam os mesmos registros. `services/location.ts` valida cidade/UF e normaliza agrupamentos; `services/debtorLocation.ts` edita a localização opcional da pessoa com contexto, perfil, transação e auditoria. O CSV aceita cinco, oito ou dez colunas; conflito de localização reverte o lote. Bases sem localização continuam válidas, sem inferência ou preenchimento em consulta.
+
+Ver `docs/dashboard-kpis.md` para fórmulas, limite de cinco anos, dimensões, compatibilidade e escopos dos filtros. Não executar builds antigos simultaneamente; preservar cópia IndexedDB antes de rollback.
+
+
+## Padrão operacional de tarefas e réguas
+
+Ver `docs/padrao-operacional.md`: novas coleções opcionais tasks/journeys/journeyRuns; atendimentos novos preservam contrato/ator e agendamentos criam tarefa atomicamente; conclusão de tarefa não representa encerramento de cobrança nem pagamento; encerramento novo afeta apenas o contrato. Réguas são versionadas e suas simulações preservam resultados e motivos, sem execução de canais. Edição revalida a revisão e a simulação idempotente revalida elegibilidade. O dashboard usa abas e conversas mostram contexto lateral responsivo. Não preencher vínculos antigos artificialmente, não usar builds antigos simultaneamente e preservar cópia antes de rollback.

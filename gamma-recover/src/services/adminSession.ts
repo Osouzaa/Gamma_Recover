@@ -69,7 +69,7 @@ export function adminReturnPath(from: unknown) {
     return '/';
   const url = new URL(from, 'https://gamma.invalid');
   return url.origin === 'https://gamma.invalid' &&
-    /^\/(?:$|(?:empresas|carteiras|devedores|conversas|cobranca|negociacoes|acordos|financeiro|campanhas|relatorios|configuracoes)(?:\/|$))/.test(
+    /^\/(?:$|(?:empresas|carteiras|devedores|conversas|cobranca|tarefas|reguas|negociacoes|acordos|financeiro|campanhas|relatorios|configuracoes)(?:\/|$))/.test(
       url.pathname,
     )
     ? url.pathname + url.search + url.hash

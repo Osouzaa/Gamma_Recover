@@ -27,6 +27,7 @@ export function ContactTimeline({ contacts }: { contacts: Contact[] }) {
               {c.destination ? ` · ${c.destination}` : ''}
             </Muted>
             <p>{c.note}</p>
+            {c.actor && <Muted>Registrado por {c.actor}</Muted>}
             {c.nextDate && (
               <footer>
                 <CalendarClock />

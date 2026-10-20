@@ -4,6 +4,8 @@ import {
   BriefcaseBusiness,
   UsersRound,
   Headset,
+  ListTodo,
+  Workflow,
   MessagesSquare,
   Handshake,
   FileCheck2,
@@ -14,6 +16,7 @@ import {
 } from 'lucide-react';
 export const navigation = [
   { path: '/', label: 'Dashboard', icon: LayoutDashboard, group: 'Visão geral' },
+  { path: '/tarefas', label: 'Tarefas', icon: ListTodo, group: 'Operação' },
   { path: '/empresas', label: 'Empresas', icon: Building2, group: 'Operação' },
   { path: '/carteiras', label: 'Carteiras', icon: BriefcaseBusiness, group: 'Operação' },
   { path: '/devedores', label: 'Devedores', icon: UsersRound, group: 'Operação' },
@@ -22,6 +25,7 @@ export const navigation = [
   { path: '/negociacoes', label: 'Negociações', icon: Handshake, group: 'Operação' },
   { path: '/acordos', label: 'Acordos', icon: FileCheck2, group: 'Operação' },
   { path: '/financeiro', label: 'Financeiro', icon: Landmark, group: 'Gestão' },
+  { path: '/reguas', label: 'Réguas de cobrança', icon: Workflow, group: 'Gestão' },
   { path: '/campanhas', label: 'Campanhas', icon: Megaphone, group: 'Gestão' },
   { path: '/relatorios', label: 'Relatórios', icon: ChartNoAxesCombined, group: 'Gestão' },
   { path: '/configuracoes', label: 'Configurações', icon: Settings2, group: 'Administração' },

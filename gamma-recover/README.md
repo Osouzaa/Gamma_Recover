@@ -141,3 +141,26 @@ Nesta etapa, o chat permite salvar, editar e excluir **rascunhos locais**, com a
 A API oficial da Meta foi escolhida, mas a integração está em análise: a [política oficial do WhatsApp Business](https://whatsappbusiness.com/policy/), verificada em 19/10/2026, inclui “debt collection” entre os serviços proibidos. O enquadramento da atividade da Gamma precisa ser esclarecido com a Meta; credenciais e templates não resolvem essa restrição por si só. A tela **Ver integração** registra essa pendência. Também permanece aberta a decisão entre número único da Gamma e números por contratante.
 
 O próximo desenho técnico, condicionado à viabilidade do caso de uso, está em `docs/whatsapp-integration.md`. Não há integração Meta ativada ou prometida como aprovada nesta versão.
+
+
+## Suspensão e evoluééo do produto
+
+No cadastro do devedor, suspenda ou retome a cobrança de um contrato com motivo obrigatório e histórico auditado. Outros contratos continuam independentes. A suspensão bloqueia novos contatos e negociaéées, sem interromper conciliação de acordos existentes. Consulte [a análise de cobertura do estudo de mercado](docs/estudo-mercado-gap-analysis.md) para capacidades atuais, lacunas e critérios das próximas entregas.
+
+
+## Dashboard de KPIs e território
+
+A seção inicial do Dashboard permite analisar valor vencido, a vencer (incluindo hoje), vencidos há menos de cinco anos e cinco anos ou mais, com faixas de atraso, agenda mensal e distribuição por cidade/UF. Use a visão consolidada sem dupla contagem ou escolha dívidas sem acordo / parcelas abertas. Filtros de carteira, vencimento e cidade controlam gráficos, registros e exportação da análise. Recuperação e operação mantêm o período próprio abaixo.
+
+Cadastre cidade/UF em **Devedores → cadastro → Editar localização** ou use o modelo CSV ampliado com dez colunas. Formatos antigos continuam aceitos; registros antigos sem localização não são preenchidos artificialmente. Não é necessário restaurar a demonstração para usar o novo dashboard.
+
+Definições, cobertura, compatibilidade e fórmulas em [Dashboard de KPIs](docs/dashboard-kpis.md).
+
+
+## Padrão operacional Gamma
+
+O dashboard separa **Carteira e território** de **Recuperação e operação** em abas. Conversas reúne lista, rascunhos e contexto do contrato, com adaptação ao celular.
+
+Em **Tarefas**, crie uma ação com contrato e prazo; use os filtros Hoje/Atrasadas/Futuras/Concluídas, busque e conclua pelo painel de detalhes. Novos retornos e promessas agendados no atendimento geram tarefas na mesma transação. O responsável é o perfil demonstrativo que registra a ação. Concluir não confirma contato nem pagamento.
+
+Em **Réguas de cobrança**, o Administrador cria etapas por empresa, com dias relativos ao vencimento, canal e ação; edita, pausa e simula. O histórico mostra inclusões e motivos de exclusão. Simular não envia mensagens, cria tarefas ou executa cobranças. Módulos novos iniciam vazios sem restaurar a base. Veja [o padrão aprovado e suas regras](docs/padrao-operacional.md).

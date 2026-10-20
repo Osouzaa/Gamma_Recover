@@ -1,5 +1,13 @@
 # Memória de produto — Gamma Recover
 
+## Padrão aprovado em 20/10/2026
+
+O usuário aprovou aplicar as propostas de Operação, Indicadores, Réguas e Conversas à plataforma e seguir esse padrão nas próximas entregas. A implementação e os limites estão em `docs/padrao-operacional.md`; a identidade permanece Gamma e o escopo permanece demonstrativo.
+
+## Decisão de 20/10/2026
+
+Após a análise do estudo de mercado, o usuário escolheu manter a demonstração por enquanto. Backend, banco centralizado, usuários reais e integração ERP de produção continuam fora do escopo. A primeira evolução entregue é suspensão/retomada de cobrança por contrato, com motivo e histórico, preservando acordos e recebimentos. Cobertura e lacunas estão em `docs/estudo-mercado-gap-analysis.md`.
+
 Registro de 19/10/2026, salvo a pedido do usuário. As prioridades abaixo são recomendações discutidas; seu registro não autoriza implementar todas elas automaticamente.
 
 ## Objetivo e fluxo

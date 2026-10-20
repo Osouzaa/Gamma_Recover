@@ -77,7 +77,7 @@ export const ReportService = {
         };
       case 'Produtividade':
         return {
-          headers: ['Operação', 'Resultado', 'Data', 'Devedor'],
+          headers: ['Atendimento', 'Resultado', 'Data', 'Devedor', 'Contrato', 'Operador'],
           rows: db.contacts
             .filter((c) => (!creditorId || c.creditorId === creditorId) && range(c.date))
             .map((c) => [
@@ -85,6 +85,8 @@ export const ReportService = {
               c.result,
               c.date,
               db.debtors.find((d) => d.id === c.debtorId)?.name,
+              db.debts.find((d) => d.id === c.debtId)?.reference || 'Não vinculado (legado)',
+              c.actor || 'Não identificado (legado)',
             ]),
         };
     }

@@ -34,14 +34,14 @@ export function ImportDialog({
         <Alert>
           Use apenas dados fictícios com documento DEMO-… Valores em reais e datas AAAA-MM-DD.
           Importação atômica: nenhum registro será salvo se houver erro. O modelo ampliado inclui
-          telefone, whatsapp e email; deixe os dados desconhecidos em branco. O formato antigo de
-          cinco colunas continua aceito.
+          telefone, whatsapp, email, cidade e uf; deixe os dados desconhecidos em branco. O formato
+          antigo de cinco ou oito colunas continua aceito.
         </Alert>
         <Button
           onClick={() =>
             download(
               'modelo-carteira.csv',
-              'documento;nome;contrato;valor;vencimento;telefone;whatsapp;email\nDEMO-9999;Pessoa Fictícia;CTR-IMPORT-9999;1250,50;2026-09-10;;;',
+              'documento;nome;contrato;valor;vencimento;telefone;whatsapp;email;cidade;uf\nDEMO-9999;Pessoa Fictícia;CTR-IMPORT-9999;1250,50;2026-09-10;;;;Campinas;SP',
             )
           }
         >

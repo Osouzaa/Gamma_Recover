@@ -1,7 +1,17 @@
 import styled from 'styled-components';
+export const ConversationWorkspace = styled.div`
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 220px;
+  gap: 16px;
+  align-items: start;
+  min-width: 0;
+  @media (max-width: 1150px) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+`;
 export const ChatLayout = styled.div`
   display: grid;
-  grid-template-columns: 290px minmax(0, 1fr);
+  grid-template-columns: 250px minmax(0, 1fr);
   min-width: 0;
   gap: 16px;
   @media (max-width: 760px) {
@@ -59,7 +69,7 @@ export const DraftList = styled.ol`
     padding: 16px;
     border: 1px solid ${({ theme }) => theme.border.default};
     border-radius: ${({ theme }) => theme.radius.md};
-    background: ${({ theme }) => theme.background.surface};
+    background: ${({ theme }) => theme.background.accent};
     overflow-wrap: anywhere;
   }
   p {

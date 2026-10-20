@@ -20,6 +20,7 @@ test('dashboard: leitura financeira, comparações válidas e filtros operaciona
     });
     return demoAdapter.read();
   });
+  await page.getByRole('tab', { name: 'Recuperação e operação', exact: true }).click();
   await expect(
     page.getByRole('heading', { name: 'Carteira administrada', exact: true }).locator('../..'),
   ).toContainText('R$ 160.605,96');

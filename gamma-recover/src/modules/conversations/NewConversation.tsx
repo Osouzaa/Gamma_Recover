@@ -1,3 +1,4 @@
+import { isSuspended } from '../../services/domain';
 import { useState } from 'react';
 import type { Database } from '../../types/domain';
 import { useWorkspace } from '../../app/providers/Context';
@@ -28,7 +29,12 @@ export function NewConversation({
   const debtor = db.debtors.find((d) => d.id === debt?.debtorId);
   const destination = debtor ? contactDestination(debtor, 'WhatsApp') : '';
   const blocked =
-    !debt || !destination || debtor?.blocked || debt.disputed || scope.role === 'Financeiro';
+    !debt ||
+    !destination ||
+    debtor?.blocked ||
+    debt.disputed ||
+    isSuspended(debt) ||
+    scope.role === 'Financeiro';
   return (
     <Modal title="Preparar conversa de WhatsApp" onClose={onClose}>
       <Form

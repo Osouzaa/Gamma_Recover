@@ -1,7 +1,7 @@
 import type { Database } from '../types/domain';
 import type { Conversation } from '../types/conversations';
 import { contactDestination } from './contactChannels';
-import { creditorOf } from './domain';
+import { contactBlocked, creditorOf } from './domain';
 import { chatTextSchema } from './conversationSchema';
 import { requireDebt, requireRole, transact, type Scope } from './store';
 import { id } from '../utils/format';
@@ -10,7 +10,7 @@ function requireContext(db: Database, scope: Scope, debtId: string, conversation
   const debt = requireDebt(db, scope, debtId);
   const debtor = db.debtors.find((d) => d.id === debt.debtorId)!;
   const creditorId = creditorOf(db, debt);
-  if (debtor.blocked || debt.disputed) throw new Error('Contato bloqueado ou dívida contestada.');
+  if (contactBlocked(db, debt)) throw new Error('Contato bloqueado ou dívida contestada/suspensa.');
   const destination = contactDestination(debtor, 'WhatsApp');
   if (!destination)
     throw new Error('Cadastre um WhatsApp utilizável antes de preparar a conversa.');

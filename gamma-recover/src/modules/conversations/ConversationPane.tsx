@@ -1,3 +1,4 @@
+import { isSuspended } from '../../services/domain';
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import type { Database } from '../../types/domain';
@@ -23,7 +24,8 @@ import {
   Stack,
   Textarea,
 } from '../../components/ui';
-import { DraftList } from './styles';
+import { DraftList, ConversationWorkspace } from './styles';
+import { ConversationContext } from './ConversationContext';
 export function ConversationPane({
   db,
   conversation,
@@ -45,7 +47,9 @@ export function ConversationPane({
     (d) => d.debtorId === debtor.id && creditorOf(db, d) === company.id,
   );
   const [debtId, setDebtId] = useState(
-    debts.find((d) => d.id === initialDebtId)?.id || debts.find((d) => !d.disputed)?.id || '',
+    debts.find((d) => d.id === initialDebtId)?.id ||
+      debts.find((d) => !d.disputed && !isSuspended(d))?.id ||
+      '',
   );
   const [text, setText] = useState('');
   const [editing, setEditing] = useState('');
@@ -56,162 +60,173 @@ export function ConversationPane({
     debtor.blocked ||
     !selectedDebt ||
     selectedDebt.disputed ||
+    isSuspended(selectedDebt) ||
     numberChanged;
   return (
-    <Panel>
-      <PanelHeader>
-        <div>
-          <h2>{debtor.name}</h2>
-          <Muted>
-            {company.name} · +{conversation.destination}
-          </Muted>
-        </div>
-        <Link to={`/devedores/${debtor.id}`}>Abrir cadastro →</Link>
-      </PanelHeader>
-      {numberChanged && (
-        <Alert $error>
-          O WhatsApp do cadastro mudou. Esta conversa permanece para consulta; prepare outra
-          conversa para o número atual.
-        </Alert>
-      )}
-      <DraftList ref={list} aria-label="Rascunhos da conversa">
-        {!conversation.drafts.length && (
-          <Empty as="li">
-            <h3>Conversa preparada</h3>
-            <p>
-              Escreva um rascunho abaixo. A troca real depende de elegibilidade na Meta e integração
-              segura no backend.
-            </p>
-          </Empty>
+    <ConversationWorkspace>
+      <Panel>
+        <PanelHeader>
+          <div>
+            <h2>{debtor.name}</h2>
+            <Muted>
+              {company.name} · +{conversation.destination}
+            </Muted>
+          </div>
+          <Link to={`/devedores/${debtor.id}`}>Abrir cadastro →</Link>
+        </PanelHeader>
+        {numberChanged && (
+          <Alert $error>
+            O WhatsApp do cadastro mudou. Esta conversa permanece para consulta; prepare outra
+            conversa para o número atual.
+          </Alert>
         )}
-        {conversation.drafts.map((draft) => (
-          <li key={draft.id}>
-            <Muted>Rascunho local · {db.debts.find((d) => d.id === draft.debtId)?.reference}</Muted>
-            <p>{draft.text}</p>
-            <small>
-              {draft.actor} ·{' '}
-              {new Date(draft.updatedAt).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })}
-            </small>
-            <Row>
-              <Button
-                disabled={!!readOnly || action.isPending}
-                onClick={() => {
-                  setText(draft.text);
-                  setDebtId(draft.debtId);
-                  setEditing(draft.id);
-                  action.reset();
-                }}
-              >
-                Editar rascunho
-              </Button>
-              <Button
-                disabled={!!readOnly || action.isPending}
-                onClick={() =>
-                  action.mutate(
-                    () => ConversationService.removeDraft(scope, conversation.id, draft.id),
-                    {
-                      onSuccess: () => {
-                        if (editing === draft.id) {
-                          setEditing('');
-                          setText('');
-                        }
-                      },
-                    },
-                  )
-                }
-              >
-                Excluir rascunho
-              </Button>
-            </Row>
-          </li>
-        ))}
-      </DraftList>
-      <PanelBody>
-        <Stack>
-          {readOnly && (
-            <Alert $error>
-              Conversa somente para consulta. Verifique o perfil, o número de WhatsApp e as
-              restrições do contrato.
-            </Alert>
+        <DraftList ref={list} aria-label="Rascunhos da conversa">
+          {!conversation.drafts.length && (
+            <Empty as="li">
+              <h3>Conversa preparada</h3>
+              <p>
+                Escreva um rascunho abaixo. A troca real depende de elegibilidade na Meta e
+                integração segura no backend.
+              </p>
+            </Empty>
           )}
-          <Feedback error={action.error} />
-          <Form
-            onSubmit={(e) => {
-              e.preventDefault();
-              action.mutate(
-                () =>
-                  ConversationService.saveDraft(
-                    scope,
-                    conversation.id,
-                    debtId,
-                    text,
-                    editing || undefined,
-                  ),
-                {
-                  onSuccess: () => {
-                    setText('');
-                    setEditing('');
-                  },
-                },
-              );
-            }}
-          >
-            <Field>
-              Contrato em atendimento
-              <Select
-                aria-label="Contrato em atendimento"
-                value={debtId}
-                disabled={scope.role === 'Financeiro' || !!editing}
-                onChange={(e) => setDebtId(e.target.value)}
-              >
-                <option value="">Selecione um contrato</option>
-                {debts.map((d) => (
-                  <option key={d.id} value={d.id} disabled={d.disputed}>
-                    {d.reference}
-                    {d.disputed ? ' · Contestada' : ''}
-                  </option>
-                ))}
-              </Select>
-            </Field>
-            <Field>
-              {editing ? 'Editar mensagem local' : 'Mensagem'}
-              <Textarea
-                aria-label="Mensagem do chat"
-                placeholder="Escreva uma mensagem para preparar o atendimento…"
-                rows={3}
-                maxLength={4096}
-                value={text}
-                disabled={!!readOnly}
-                onChange={(e) => setText(e.target.value)}
-              />
-            </Field>
-            <Row>
-              <Button $variant="primary" disabled={!!readOnly || !text.trim() || action.isPending}>
-                {editing ? 'Atualizar rascunho' : 'Salvar rascunho'}
-              </Button>
-              {editing && (
+          {conversation.drafts.map((draft) => (
+            <li key={draft.id}>
+              <Muted>
+                Rascunho local · {db.debts.find((d) => d.id === draft.debtId)?.reference}
+              </Muted>
+              <p>{draft.text}</p>
+              <small>
+                {draft.actor} ·{' '}
+                {new Date(draft.updatedAt).toLocaleString('pt-BR', {
+                  timeZone: 'America/Sao_Paulo',
+                })}
+              </small>
+              <Row>
                 <Button
-                  type="button"
+                  disabled={!!readOnly || action.isPending}
                   onClick={() => {
-                    setText('');
-                    setEditing('');
+                    setText(draft.text);
+                    setDebtId(draft.debtId);
+                    setEditing(draft.id);
+                    action.reset();
                   }}
                 >
-                  Cancelar edição
+                  Editar rascunho
                 </Button>
-              )}
-              <Button type="button" disabled aria-describedby="whatsapp-disconnected">
-                Enviar pelo WhatsApp
-              </Button>
-              <Muted>{text.length}/4096</Muted>
-            </Row>
-            <Muted id="whatsapp-disconnected">
-              Envio indisponível: elegibilidade Meta pendente e backend não integrado. Rascunhos não
-              são enviados, entregues ou lidos.
-            </Muted>
-          </Form>
-        </Stack>
-      </PanelBody>
-    </Panel>
+                <Button
+                  disabled={!!readOnly || action.isPending}
+                  onClick={() =>
+                    action.mutate(
+                      () => ConversationService.removeDraft(scope, conversation.id, draft.id),
+                      {
+                        onSuccess: () => {
+                          if (editing === draft.id) {
+                            setEditing('');
+                            setText('');
+                          }
+                        },
+                      },
+                    )
+                  }
+                >
+                  Excluir rascunho
+                </Button>
+              </Row>
+            </li>
+          ))}
+        </DraftList>
+        <PanelBody>
+          <Stack>
+            {readOnly && (
+              <Alert $error>
+                Conversa somente para consulta. Verifique o perfil, o número de WhatsApp e as
+                restrições do contrato.
+              </Alert>
+            )}
+            <Feedback error={action.error} />
+            <Form
+              onSubmit={(e) => {
+                e.preventDefault();
+                action.mutate(
+                  () =>
+                    ConversationService.saveDraft(
+                      scope,
+                      conversation.id,
+                      debtId,
+                      text,
+                      editing || undefined,
+                    ),
+                  {
+                    onSuccess: () => {
+                      setText('');
+                      setEditing('');
+                    },
+                  },
+                );
+              }}
+            >
+              <Field>
+                Contrato em atendimento
+                <Select
+                  aria-label="Contrato em atendimento"
+                  value={debtId}
+                  disabled={scope.role === 'Financeiro' || !!editing}
+                  onChange={(e) => setDebtId(e.target.value)}
+                >
+                  <option value="">Selecione um contrato</option>
+                  {debts.map((d) => (
+                    <option key={d.id} value={d.id} disabled={d.disputed || isSuspended(d)}>
+                      {d.reference}
+                      {d.disputed ? ' · Contestada' : isSuspended(d) ? ' · Suspensa' : ''}
+                    </option>
+                  ))}
+                </Select>
+              </Field>
+              <Field>
+                {editing ? 'Editar mensagem local' : 'Mensagem'}
+                <Textarea
+                  aria-label="Mensagem do chat"
+                  placeholder="Escreva uma mensagem para preparar o atendimento…"
+                  rows={3}
+                  maxLength={4096}
+                  value={text}
+                  disabled={!!readOnly}
+                  onChange={(e) => setText(e.target.value)}
+                />
+              </Field>
+              <Row>
+                <Button
+                  $variant="primary"
+                  disabled={!!readOnly || !text.trim() || action.isPending}
+                >
+                  {editing ? 'Atualizar rascunho' : 'Salvar rascunho'}
+                </Button>
+                {editing && (
+                  <Button
+                    type="button"
+                    onClick={() => {
+                      setText('');
+                      setEditing('');
+                    }}
+                  >
+                    Cancelar edição
+                  </Button>
+                )}
+                <Button type="button" disabled aria-describedby="whatsapp-disconnected">
+                  Enviar pelo WhatsApp
+                </Button>
+                <Muted>{text.length}/4096</Muted>
+              </Row>
+              <Muted id="whatsapp-disconnected">
+                Envio indisponível: elegibilidade Meta pendente e backend não integrado. Rascunhos
+                não são enviados, entregues ou lidos.
+              </Muted>
+            </Form>
+          </Stack>
+        </PanelBody>
+      </Panel>
+      <ConversationContext db={db} debt={selectedDebt} />
+    </ConversationWorkspace>
   );
 }

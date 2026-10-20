@@ -2,6 +2,14 @@ import type { Database } from '../types/domain';
 import { addMonths, today } from '../utils/format';
 export function seed(): Database {
   const now = today();
+  const locations = [
+    { city: 'São Paulo', state: 'SP' as const },
+    { city: 'Campinas', state: 'SP' as const },
+    { city: 'Rio de Janeiro', state: 'RJ' as const },
+    { city: 'Belo Horizonte', state: 'MG' as const },
+    { city: 'Curitiba', state: 'PR' as const },
+    { city: 'Salvador', state: 'BA' as const },
+  ];
   const names = [
     'Marina Exemplo',
     'Rafael Modelo',
@@ -56,6 +64,7 @@ export function seed(): Database {
       email: `pessoa${i + 1}@example.invalid`,
       phone: '(00) 00000-0000',
       blocked: false,
+      ...(i % 8 < 6 ? { location: locations[i % 8] } : {}),
     })),
     debts: names.map((_, i) => ({
       id: `dt-${i + 1}`,

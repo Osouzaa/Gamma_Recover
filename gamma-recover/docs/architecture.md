@@ -80,3 +80,22 @@ Não operar builds anteriores e atuais simultaneamente: leitores antigos podem d
 ## Formulário de empresas
 
 O modal de cadastro agrupa identificação, contato e contrato, com duas colunas em telas maiores e uma em celulares. Campos textuais exibem exemplos fictícios; os rótulos permanecem visíveis. O seletor de PDF informa limite de 2 MB, mostra o nome selecionado e permite substituição ou remoção, preservando a validação de conteúdo no serviço. Os controles compartilhados têm estados de foco, desabilitado e erro.
+
+
+## Suspensão por contrato
+
+`services/debtSuspension.ts` registra suspensão e retomada transacionais, com motivo, autor, data e revalidação do estado para evitar confirmação duplicada. `Debt.suspensionHistory` é opcional; a última ocorrência define a suspensão. Administrador/Operador podem alterar somente contratos no contexto. Contatos, conversas e negociação revalidam a restriééo no serviéo; fila, saldo elegível e campanhas a respeitam. Campanhas revalidam o público ao simular. Acordos e recebimentos existentes são preservados. Retomar não remove outras restrições. O histórico está no cadastro do devedor.
+
+Não operar builds antigos e atuais simultaneamente; preservar cópia IndexedDB antes de rollback. A análise do estudo e próximos critérios estão em `docs/estudo-mercado-gap-analysis.md`.
+
+
+## Análise de carteira e localização
+
+`services/portfolioAnalytics.ts` calcula a posição atual por dívida/parcela, faixas de atraso, vencimentos e cidade. A visão consolidada evita dupla contagem, mantém os bloqueios como restrições operacionais e exclui parcelas de acordos cancelados/rompidos. É somente leitura; filtros e exportação usam os mesmos registros. `services/location.ts` valida cidade/UF e normaliza agrupamentos; `services/debtorLocation.ts` edita a localização opcional da pessoa com contexto, perfil, transação e auditoria. O CSV aceita cinco, oito ou dez colunas; conflito de localização reverte o lote. Bases sem localização continuam válidas, sem inferência ou preenchimento em consulta.
+
+Ver `docs/dashboard-kpis.md` para fórmulas, limite de cinco anos, dimensões, compatibilidade e escopos dos filtros. Não executar builds antigos simultaneamente; preservar cópia IndexedDB antes de rollback.
+
+
+## Padrão operacional de tarefas e réguas
+
+Ver `docs/padrao-operacional.md`: novas coleções opcionais tasks/journeys/journeyRuns; atendimentos novos preservam contrato/ator e agendamentos criam tarefa atomicamente; conclusão de tarefa não representa encerramento de cobrança nem pagamento; encerramento novo afeta apenas o contrato. Réguas são versionadas e suas simulações preservam resultados e motivos, sem execução de canais. Edição revalida a revisão e a simulação idempotente revalida elegibilidade. O dashboard usa abas e conversas mostram contexto lateral responsivo. Não preencher vínculos antigos artificialmente, não usar builds antigos simultaneamente e preservar cópia antes de rollback.

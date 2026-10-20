@@ -4,6 +4,8 @@ Memória de produto e prioridades discutidas com o usuário: leia `docs/memoria-
 
 Aplicação frontend demonstrativa de recuperação de crédito. Leia `README.md`, `docs/architecture.md` e `docs/business-rules.md` antes de alterar fluxos.
 
+Padrão visual aprovado pelo usuário em 20/10/2026: seguir `docs/standards/ui-ux.md` e `docs/padrao-operacional.md`. Usar a referência de tarefas, indicadores, réguas e conversas com identidade Gamma, navegação nomeada, tabelas compactas e detalhes no contexto; recursos demonstrativos nunca representam execução externa.
+
 - React, TypeScript, Vite, Styled-components e npm. Não adicionar backend, banco real, autenticação de produção, mensageria ou pagamentos reais neste escopo.
 - Usar exclusivamente pessoas, documentos e credores fictícios. Importações aceitam documentos `DEMO-...`.
 - Tokens semânticos em `src/theme`. Nunca espalhar cores hexadecimais nos componentes. Seguir Enterprise Compact e não aplicar limite de largura nas páginas administrativas.

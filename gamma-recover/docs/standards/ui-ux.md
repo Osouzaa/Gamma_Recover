@@ -43,3 +43,8 @@ Tabelas usam células de 10px × 16px, cabeçalhos de 12px, direção explícita
 Detalhes de carteira combinam contratos vinculados e histórico de importações. Histórico de cobrança usa timeline, ordenada pelo atendimento mais recente. Acordos exibem progresso por quantidade de itens confirmados, sem sugerir percentual financeiro. O simulador destaca o total negociado no resumo, preservando a política e o aceite. Campanhas permitem consultar a seleção preservada de público, sem alegar envios. Configurações usam abas com setas, Home e End. Portal mantém layout próprio e realça sua navegação ativa.
 
 Transições limitadas a hover, bordas e recolhimento (140ms); respeitar prefers-reduced-motion. Não criar notificações ou ações decorativas. A identidade visual centraliza cores semânticas, estados, raios e movimentos no tema existente.
+
+
+## Referência aprovada: operação, indicadores, réguas e conversas
+
+Seguir `docs/padrao-operacional.md` nas próximas telas: identidade Gamma, navegação nomeada, faixas de indicadores, abas para contextos distintos, tabelas compactas com detalhes ao lado, etapas de réguas em sequência e conversa com contexto do contrato. Em mobile, reordenar em blocos legíveis, sem estreitar o texto até ficar ilegível. Funcionalidades não integradas permanecem identificadas como simulação/rascunho.

@@ -3,7 +3,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useWorkspace } from '../../../../app/providers/Context';
 import { useAction, useDatabase } from '../../../../hooks/useDatabase';
 import { NegotiationService, scopedDebts } from '../../../../services/operations';
-import { activeAgreement } from '../../../../services/domain';
+import { activeAgreement, isSuspended } from '../../../../services/domain';
 import { date, money } from '../../../../utils/format';
 import { DataTable } from '../../../../components/DataTable';
 import { Feedback, ErrorState, LoadingState } from '../../../../components/Feedback';
@@ -35,6 +35,7 @@ export default function Negotiations() {
     (d) =>
       !activeAgreement(db, d.id) &&
       !d.disputed &&
+      !isSuspended(d) &&
       !db.debtors.find((v) => v.id === d.debtorId)?.blocked &&
       db.portfolios.find((p) => p.id === d.portfolioId)?.active,
   );
