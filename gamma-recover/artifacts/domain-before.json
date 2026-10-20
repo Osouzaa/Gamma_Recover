@@ -1,0 +1,12 @@
+{
+  "src/services/domain.ts": "ef7a919b9819c541ff8158c23540d5faea1dcd45944037ad2ce53fc266b4b752",
+  "src/services/operations.ts": "df1cfe7ba8d2a0621bad552ee3ea4cda912b70e064c371318487f167345c4494",
+  "src/services/store.ts": "9c925b6514ca3a5d113d4944b1f5516108c0ac046a32eb4608f4a6ae2c3c94a4",
+  "src/services/persistence.ts": "64f7dd5a0de5d942baac59bf6c25406fe3007c06de0b604b43f4377d53324a5b",
+  "src/services/schema.ts": "2eaee6ad7391344b1db2075073ea21d21b797ae7b4179048d338c70e3205f3ec",
+  "src/services/admin.ts": "b7b7692f9b7526d614d4ae373e96e2cb20d1e6169003247aefeca60b1e7830aa",
+  "src/services/import.ts": "440559e58eb80e2a1ccd7aefe2518f86f8b27223d37390b808d20f5e77923703",
+  "src/services/reports.ts": "0f533236c3e6a8508098eaf5e70a6a25e645d0cfa6ccda54274dba1f3c896f97",
+  "src/mocks/seed.ts": "4ec0caf3d1e069ebc61f4010e4d1d19a5e8fc010cf4042bdf0b1a55d76926db0",
+  "src/types/domain.ts": "de57dc2bcfe16b5d879eec6ad2794af83a7c767f692a0622e0a7510023f1486e"
+}

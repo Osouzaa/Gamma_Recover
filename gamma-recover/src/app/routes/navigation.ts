@@ -1,0 +1,28 @@
+import {
+  LayoutDashboard,
+  Building2,
+  BriefcaseBusiness,
+  UsersRound,
+  Headset,
+  MessagesSquare,
+  Handshake,
+  FileCheck2,
+  Landmark,
+  Megaphone,
+  ChartNoAxesCombined,
+  Settings2,
+} from 'lucide-react';
+export const navigation = [
+  { path: '/', label: 'Dashboard', icon: LayoutDashboard, group: 'Visão geral' },
+  { path: '/empresas', label: 'Empresas', icon: Building2, group: 'Operação' },
+  { path: '/carteiras', label: 'Carteiras', icon: BriefcaseBusiness, group: 'Operação' },
+  { path: '/devedores', label: 'Devedores', icon: UsersRound, group: 'Operação' },
+  { path: '/conversas', label: 'Conversas', icon: MessagesSquare, group: 'Operação' },
+  { path: '/cobranca', label: 'Operação de cobrança', icon: Headset, group: 'Operação' },
+  { path: '/negociacoes', label: 'Negociações', icon: Handshake, group: 'Operação' },
+  { path: '/acordos', label: 'Acordos', icon: FileCheck2, group: 'Operação' },
+  { path: '/financeiro', label: 'Financeiro', icon: Landmark, group: 'Gestão' },
+  { path: '/campanhas', label: 'Campanhas', icon: Megaphone, group: 'Gestão' },
+  { path: '/relatorios', label: 'Relatórios', icon: ChartNoAxesCombined, group: 'Gestão' },
+  { path: '/configuracoes', label: 'Configurações', icon: Settings2, group: 'Administração' },
+];

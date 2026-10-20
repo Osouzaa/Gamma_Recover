@@ -1,0 +1,18 @@
+{
+  "checks": {
+    "video_h264": true,
+    "audio_aac": true,
+    "subtitles": true,
+    "full_hd": true,
+    "39_chapters": true,
+    "duration_31_52": true,
+    "browser_errors_absent": true,
+    "full_decode_ok": true
+  },
+  "duration": "31:52",
+  "resolution": "1920x1080",
+  "bytes": 22844484,
+  "narration": "Microsoft Maria Desktop / pt-BR / voz sintética",
+  "subtitle_cues": 284,
+  "chapters": 39
+}

@@ -1,0 +1,22 @@
+{
+  "checks": {
+    "video_h264": true,
+    "audio_aac": true,
+    "subtitles": true,
+    "full_hd": true,
+    "39_chapters": true,
+    "duration_matches_timeline": true,
+    "all_neural_audio_files": true,
+    "full_decode_ok": true
+  },
+  "duration": "24:12",
+  "seconds": 1452.0,
+  "resolution": "1920x1080",
+  "bytes": 22849287,
+  "voice": {
+    "voice": "pt-BR-FranciscaNeural",
+    "rate": "-8%",
+    "pitch": "-2Hz"
+  },
+  "chapters": 39
+}

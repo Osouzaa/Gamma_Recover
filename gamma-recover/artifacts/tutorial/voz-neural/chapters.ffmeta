@@ -1,0 +1,199 @@
+;FFMETADATA1
+title=Gamma Recover - treinamento completo
+artist=Gamma Estratégia e Consultoria
+comment=Tutorial com capturas reais e voz neural brasileira em ritmo suave. Dados fictícios.
+[CHAPTER]
+TIMEBASE=1/1000
+START=0
+END=39200
+title=01 - Gamma Recover: treinamento da plataforma
+[CHAPTER]
+TIMEBASE=1/1000
+START=39200
+END=76200
+title=02 - Como acessar e entender os perfis
+[CHAPTER]
+TIMEBASE=1/1000
+START=76200
+END=110000
+title=03 - Entrar no painel
+[CHAPTER]
+TIMEBASE=1/1000
+START=110000
+END=149200
+title=04 - Dashboard e menu principal
+[CHAPTER]
+TIMEBASE=1/1000
+START=149200
+END=185200
+title=05 - O cadastro começa pela empresa contratante
+[CHAPTER]
+TIMEBASE=1/1000
+START=185200
+END=228800
+title=06 - Preencher razão social e contatos
+[CHAPTER]
+TIMEBASE=1/1000
+START=228800
+END=267600
+title=07 - Registrar o contrato de prestação de serviços
+[CHAPTER]
+TIMEBASE=1/1000
+START=267600
+END=303800
+title=08 - Salvar e consultar a empresa
+[CHAPTER]
+TIMEBASE=1/1000
+START=303800
+END=342600
+title=09 - Configurar a política de negociação
+[CHAPTER]
+TIMEBASE=1/1000
+START=342600
+END=378600
+title=10 - Abrir as carteiras da empresa
+[CHAPTER]
+TIMEBASE=1/1000
+START=378600
+END=416400
+title=11 - Criar uma carteira
+[CHAPTER]
+TIMEBASE=1/1000
+START=416400
+END=452200
+title=12 - Preparar o arquivo CSV
+[CHAPTER]
+TIMEBASE=1/1000
+START=452200
+END=490000
+title=13 - Revisar a prévia antes de confirmar
+[CHAPTER]
+TIMEBASE=1/1000
+START=490000
+END=526400
+title=14 - Confirmar a importação
+[CHAPTER]
+TIMEBASE=1/1000
+START=526400
+END=561800
+title=15 - Localizar uma pessoa em Devedores
+[CHAPTER]
+TIMEBASE=1/1000
+START=561800
+END=598200
+title=16 - Consultar o cadastro e as restrições
+[CHAPTER]
+TIMEBASE=1/1000
+START=598200
+END=633800
+title=17 - Trabalhar a fila de cobrança
+[CHAPTER]
+TIMEBASE=1/1000
+START=633800
+END=674000
+title=18 - Registrar atendimento no modal
+[CHAPTER]
+TIMEBASE=1/1000
+START=674000
+END=710200
+title=19 - Promessa de pagamento e encerramento
+[CHAPTER]
+TIMEBASE=1/1000
+START=710200
+END=744600
+title=20 - Salvar e acompanhar o histórico
+[CHAPTER]
+TIMEBASE=1/1000
+START=744600
+END=782600
+title=21 - Simular desconto, entrada e parcelamento
+[CHAPTER]
+TIMEBASE=1/1000
+START=782600
+END=822600
+title=22 - Revisar a proposta e registrar o aceite
+[CHAPTER]
+TIMEBASE=1/1000
+START=822600
+END=857400
+title=23 - Formalizar o acordo e gerar as parcelas
+[CHAPTER]
+TIMEBASE=1/1000
+START=857400
+END=892600
+title=24 - Acompanhar a lista de acordos
+[CHAPTER]
+TIMEBASE=1/1000
+START=892600
+END=930000
+title=25 - Consultar parcelas e comprovante
+[CHAPTER]
+TIMEBASE=1/1000
+START=930000
+END=967000
+title=26 - Conferir parcelas no Financeiro
+[CHAPTER]
+TIMEBASE=1/1000
+START=967000
+END=1002000
+title=27 - Entender uma divergência de valor
+[CHAPTER]
+TIMEBASE=1/1000
+START=1002000
+END=1038200
+title=28 - Confirmar o recebimento pelo valor exato
+[CHAPTER]
+TIMEBASE=1/1000
+START=1038200
+END=1077000
+title=29 - Conferir o resultado no dashboard
+[CHAPTER]
+TIMEBASE=1/1000
+START=1077000
+END=1111600
+title=30 - Tratar uma proposta que exige aprovação
+[CHAPTER]
+TIMEBASE=1/1000
+START=1111600
+END=1147800
+title=31 - Aprovar não substitui o aceite
+[CHAPTER]
+TIMEBASE=1/1000
+START=1147800
+END=1183800
+title=32 - Organizar uma campanha de cobrança
+[CHAPTER]
+TIMEBASE=1/1000
+START=1183800
+END=1219600
+title=33 - Entender a simulação de campanha
+[CHAPTER]
+TIMEBASE=1/1000
+START=1219600
+END=1259000
+title=34 - Consultar e exportar relatórios
+[CHAPTER]
+TIMEBASE=1/1000
+START=1259000
+END=1292600
+title=35 - Voltar à ficha da empresa
+[CHAPTER]
+TIMEBASE=1/1000
+START=1292600
+END=1328000
+title=36 - Consultar a trilha de auditoria
+[CHAPTER]
+TIMEBASE=1/1000
+START=1328000
+END=1366400
+title=37 - Entender usuários e permissões
+[CHAPTER]
+TIMEBASE=1/1000
+START=1366400
+END=1407400
+title=38 - Parâmetros e cuidados com os dados
+[CHAPTER]
+TIMEBASE=1/1000
+START=1407400
+END=1452000
+title=39 - Sair e organizar a rotina da equipe

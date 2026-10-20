@@ -1,0 +1,1386 @@
+1
+00:00:00,000 --> 00:00:08,431
+Bem-vindo ao treinamento do Gamma Recover, o CRM
+de cobrança da Gamma Estratégia e Consultoria.
+
+2
+00:00:08,431 --> 00:00:16,863
+Neste vídeo você vai conhecer a plataforma e
+acompanhar um exemplo completo de uso, desde
+
+3
+00:00:16,863 --> 00:00:23,046
+a contratação de uma empresa até
+a conferência de um recebimento.
+
+4
+00:00:23,046 --> 00:00:30,353
+O caminho principal é: cadastrar a empresa,
+configurar sua política, criar uma carteira,
+
+5
+00:00:30,353 --> 00:00:37,098
+importar as dívidas, registrar os contatos,
+negociar, formalizar o acordo e conciliar
+
+6
+00:00:37,098 --> 00:00:44,405
+as parcelas. A versão apresentada é
+demonstrativa e atende somente à equipe interna.
+
+7
+00:00:44,405 --> 00:00:48,902
+O portal do devedor foi retirado desta etapa.
+
+8
+00:00:50,200 --> 00:00:58,140
+Começamos na tela de login. Existem três
+contas públicas para testar o sistema.
+
+9
+00:00:58,140 --> 00:01:05,469
+O Administrador cadastra empresas e carteiras,
+configura políticas e executa as operações
+
+10
+00:01:05,469 --> 00:01:11,576
+de gestão. O Operador consulta
+os registros, atende e negocia.
+
+11
+00:01:11,576 --> 00:01:20,127
+O Financeiro consulta e concilia parcelas.
+Nesta demonstração, os três perfis usam a senha
+
+12
+00:01:20,127 --> 00:01:24,402
+Gamma, arroba, cento e vinte e três.
+
+13
+00:01:24,402 --> 00:01:32,952
+Não use credenciais reais. Esse login demonstra
+a experiência de acesso, mas ainda não
+
+14
+00:01:32,952 --> 00:01:39,060
+oferece a autenticação de produção,
+que dependerá de um servidor.
+
+15
+00:01:40,400 --> 00:01:48,517
+Para entrar, informe o e-mail da conta
+demonstrativa, preencha a senha e clique em Entrar.
+
+16
+00:01:48,517 --> 00:01:54,469
+Estamos usando a conta de administrador
+para apresentar todos os módulos.
+
+17
+00:01:54,469 --> 00:02:03,128
+Se o e-mail ou a senha estiverem incorretos,
+o sistema mostra uma mensagem e mantém o
+
+18
+00:02:03,128 --> 00:02:10,162
+formulário aberto. Uma sessão válida permite
+navegar pelo painel durante até oito horas.
+
+19
+00:02:10,162 --> 00:02:17,738
+Se você chegou por um endereço administrativo
+específico, o login retorna para essa página.
+
+20
+00:02:17,738 --> 00:02:22,608
+A senha não é armazenada na sessão do navegador.
+
+21
+00:02:24,000 --> 00:02:28,321
+Esta é a visão geral da operação.
+
+22
+00:02:28,321 --> 00:02:37,581
+À esquerda ficam os módulos. No topo, o
+seletor de empresa permite trabalhar com todos
+
+23
+00:02:37,581 --> 00:02:43,754
+os credores ou concentrar a
+leitura em uma empresa específica.
+
+24
+00:02:43,754 --> 00:02:50,544
+O dashboard mostra saldo administrado, valores
+negociados e recebidos, parcelas vencidas
+
+25
+00:02:50,544 --> 00:02:56,717
+e outros indicadores. Ajuste o período
+para interpretar os resultados.
+
+26
+00:02:56,717 --> 00:03:02,890
+Os botões de ajuda explicam
+a base de cada indicador.
+
+27
+00:03:02,890 --> 00:03:09,063
+Lembre-se: saldo original, acordo negociado
+e dinheiro recebido representam situações
+
+28
+00:03:09,063 --> 00:03:14,618
+diferentes. Um acordo criado
+não é um pagamento confirmado.
+
+29
+00:03:16,000 --> 00:03:20,406
+O gestor fechou a contratação com uma empresa.
+
+30
+00:03:20,406 --> 00:03:27,016
+O primeiro passo operacional é abrir
+Empresas e clicar em Nova empresa.
+
+31
+00:03:27,016 --> 00:03:34,176
+Essa empresa será a credora das carteiras
+e dívidas que entrarem na operação.
+
+32
+00:03:34,176 --> 00:03:41,888
+Não existe uma lista paralela desconectada: o
+cadastro de empresa aproveita a mesma estrutura
+
+33
+00:03:41,888 --> 00:03:50,150
+de credores usada pela cobrança. Se uma
+empresa estiver selecionada no topo e o botão
+
+34
+00:03:50,150 --> 00:03:55,658
+estiver indisponível, volte para Todos
+os credores para cadastrar outra.
+
+35
+00:03:55,658 --> 00:04:01,717
+Para editar uma empresa existente, use
+Editar empresa na linha correspondente.
+
+36
+00:04:03,000 --> 00:04:11,454
+No formulário, preencha razão social, documento
+fictício no campo de CNPJ, nome fantasia,
+
+37
+00:04:11,454 --> 00:04:17,957
+contato responsável, telefone, e-mail,
+endereço e responsável interno da Gamma.
+
+38
+00:04:17,957 --> 00:04:23,159
+Neste exemplo, usamos a empresa
+fictícia Aurora Serviços.
+
+39
+00:04:23,159 --> 00:04:30,312
+O contato responsável identifica com
+quem a Gamma fala na contratante.
+
+40
+00:04:30,312 --> 00:04:35,515
+O responsável interno indica
+quem acompanha essa conta.
+
+41
+00:04:35,515 --> 00:04:41,367
+Os campos de contato e o e-mail são validados.
+
+42
+00:04:41,367 --> 00:04:49,171
+Como esta é uma demonstração, utilize
+identificadores iniciados por DEMO e informações
+
+43
+00:04:49,171 --> 00:04:58,275
+inteiramente fictícias. O cadastro ainda não
+consulta ou valida um CNPJ real na Receita
+
+44
+00:04:58,275 --> 00:04:58,925
+Federal.
+
+45
+00:05:00,200 --> 00:05:08,195
+Na segunda parte do cadastro ficam os dados
+do contrato de prestação de serviços:
+
+46
+00:05:08,195 --> 00:05:13,905
+referência, início e fim da vigência,
+serviços e condições comerciais.
+
+47
+00:05:13,905 --> 00:05:20,187
+O anexo é opcional e aceita
+PDF de até dois megabytes.
+
+48
+00:05:20,187 --> 00:05:25,327
+Depois, será possível baixar,
+substituir ou remover esse arquivo.
+
+49
+00:05:25,327 --> 00:05:30,466
+O fim da vigência não pode anteceder o início.
+
+50
+00:05:30,466 --> 00:05:36,177
+Esse contrato registra a
+relação da Gamma com a empresa.
+
+51
+00:05:36,177 --> 00:05:41,887
+Ele não é o contrato da dívida de um devedor.
+
+52
+00:05:41,887 --> 00:05:45,885
+As condições comerciais
+ainda são apenas cadastrais:
+
+53
+00:05:45,885 --> 00:05:50,453
+o sistema não calcula comissão
+nem repasse automaticamente.
+
+54
+00:05:51,800 --> 00:06:00,248
+Depois de salvar, a empresa aparece na tabela,
+com contato, responsável interno e quantidade
+
+55
+00:06:00,248 --> 00:06:07,488
+de carteiras vinculadas. A busca aceita
+razão social, nome fantasia ou documento.
+
+56
+00:06:07,488 --> 00:06:16,539
+Em Detalhes você consulta os dados do cadastro,
+o contrato de serviços, as carteiras e
+
+57
+00:06:16,539 --> 00:06:24,383
+o histórico de importações. Em Editar empresa
+você complementa ou corrige as informações.
+
+58
+00:06:24,383 --> 00:06:30,417
+A edição dos contatos preserva a
+política de negociação vigente.
+
+59
+00:06:30,417 --> 00:06:38,261
+O cadastro de empresas e suas alterações são
+restritos ao Administrador na demonstração.
+
+60
+00:06:39,600 --> 00:06:45,927
+Antes de iniciar a cobrança, abra
+Política na linha da empresa.
+
+61
+00:06:45,927 --> 00:06:53,979
+Defina o desconto máximo, o desconto permitido
+sem aprovação, o número máximo de parcelas
+
+62
+00:06:53,979 --> 00:06:58,006
+e o valor mínimo de cada parcela.
+
+63
+00:06:58,006 --> 00:07:04,908
+Neste exemplo, autorizamos até trinta por
+cento de desconto, com aprovação automática
+
+64
+00:07:04,908 --> 00:07:11,810
+até vinte por cento, até doze
+parcelas e mínimo de cinquenta reais.
+
+65
+00:07:11,810 --> 00:07:16,987
+Uma aprovação excepcional nunca
+pode ultrapassar o desconto máximo.
+
+66
+00:07:16,987 --> 00:07:22,163
+Novas empresas começam sem
+desconto e com uma parcela.
+
+67
+00:07:22,163 --> 00:07:28,490
+Por isso, revise essa configuração
+conforme o contrato antes de negociar.
+
+68
+00:07:29,800 --> 00:07:33,821
+Na linha da Aurora, clicamos em Carteiras.
+
+69
+00:07:33,821 --> 00:07:41,864
+A plataforma seleciona essa empresa no
+contexto global e abre sua lista de carteiras.
+
+70
+00:07:41,864 --> 00:07:47,034
+Isso evita misturar contratos de
+empresas diferentes na operação.
+
+71
+00:07:47,034 --> 00:07:53,927
+Uma carteira organiza um conjunto de dívidas,
+por exemplo mensalidades, serviços vencidos
+
+72
+00:07:53,927 --> 00:08:00,821
+ou uma campanha de recuperação. A
+empresa é a proprietária da carteira.
+
+73
+00:08:00,821 --> 00:08:07,714
+Depois de criada, a carteira não pode
+ser transferida para outro credor.
+
+74
+00:08:07,714 --> 00:08:16,331
+Para consultar o conjunto de toda a operação,
+volte a selecionar Todos os credores no
+
+75
+00:08:16,331 --> 00:08:16,906
+topo.
+
+76
+00:08:18,200 --> 00:08:27,579
+Clique em Nova carteira, escolha um nome que
+identifique o lote e confira a empresa contratante.
+
+77
+00:08:27,579 --> 00:08:34,027
+Como entramos pela empresa, o vínculo
+já está selecionado e protegido.
+
+78
+00:08:34,027 --> 00:08:40,474
+Fora de um contexto específico, é necessário
+escolher a empresa explicitamente.
+
+79
+00:08:40,474 --> 00:08:46,336
+A opção Carteira ativa para negociação
+controla sua disponibilidade operacional.
+
+80
+00:08:46,336 --> 00:08:55,129
+Depois de salvar, a carteira passa a aparecer
+na lista com quantidade de contratos, saldo
+
+81
+00:08:55,129 --> 00:08:59,818
+original e ações de detalhes,
+edição e importação.
+
+82
+00:08:59,818 --> 00:09:06,852
+Uma carteira precisa existir antes de
+importar seus devedores e suas dívidas.
+
+83
+00:09:08,200 --> 00:09:12,043
+Na linha da carteira, clique em CSV.
+
+84
+00:09:12,043 --> 00:09:19,728
+O modal mostra a empresa, o documento
+e a carteira que receberão os dados.
+
+85
+00:09:19,728 --> 00:09:24,120
+Confira esse destino antes
+de escolher o arquivo.
+
+86
+00:09:24,120 --> 00:09:29,060
+O botão Baixar modelo CSV
+fornece o cabeçalho esperado:
+
+87
+00:09:29,060 --> 00:09:35,099
+documento, nome, contrato, valor e
+vencimento, separados por ponto e vírgula.
+
+88
+00:09:35,099 --> 00:09:43,333
+O valor deve estar em reais e a
+data no formato ano, mês e dia.
+
+89
+00:09:43,333 --> 00:09:48,823
+O limite é um megabyte e mil
+registros por importação.
+
+90
+00:09:48,823 --> 00:09:54,861
+Nesta versão, os documentos das pessoas
+também precisam começar por DEMO.
+
+91
+00:09:56,200 --> 00:10:01,995
+Selecionamos um CSV com duas
+pessoas fictícias e duas dívidas.
+
+92
+00:10:01,995 --> 00:10:07,791
+A prévia permite conferir nomes,
+referências dos contratos e valores.
+
+93
+00:10:07,791 --> 00:10:13,586
+O sistema aponta problemas de estrutura,
+datas, valores e duplicidades.
+
+94
+00:10:13,586 --> 00:10:22,280
+A referência do contrato de dívida é única
+dentro de uma empresa, inclusive entre suas
+
+95
+00:10:22,280 --> 00:10:26,916
+carteiras. Outra empresa pode
+ter uma referência igual.
+
+96
+00:10:26,916 --> 00:10:33,870
+Se um documento já existir, o nome
+da pessoa precisa ser compatível.
+
+97
+00:10:33,870 --> 00:10:43,723
+A mesma pessoa pode ter dívidas em mais de uma
+empresa, mas os vínculos das dívidas continuam
+
+98
+00:10:43,723 --> 00:10:44,302
+separados.
+
+99
+00:10:45,600 --> 00:10:50,304
+Com a prévia correta, clique
+em Confirmar importação.
+
+100
+00:10:50,304 --> 00:10:58,537
+A operação é atômica: se algum registro for
+inválido, nenhum contrato daquele lote será
+
+101
+00:10:58,537 --> 00:11:06,181
+salvo. Depois da confirmação, a base compartilhada
+é atualizada e os módulos relacionados
+
+102
+00:11:06,181 --> 00:11:13,825
+passam a consultar os mesmos registros. O histórico
+guarda carteira, arquivo, data, quantidade
+
+103
+00:11:13,825 --> 00:11:23,234
+e o usuário das novas importações. Cada dívida
+está ligada à carteira, e a carteira está
+
+104
+00:11:23,234 --> 00:11:31,466
+ligada à empresa. Esse encadeamento é o que
+permite saber a qual contratante pertence
+
+105
+00:11:31,466 --> 00:11:32,642
+cada cobrança.
+
+106
+00:11:34,000 --> 00:11:40,314
+Agora abrimos Devedores. A empresa permanece
+selecionada enquanto navegamos pelo painel.
+
+107
+00:11:40,314 --> 00:11:48,351
+Use a busca para localizar a pessoa
+importada e confira os dados da listagem.
+
+108
+00:11:48,351 --> 00:11:56,387
+Uma pessoa representa o cadastro do devedor; os
+contratos de dívida são registros separados.
+
+109
+00:11:56,387 --> 00:12:02,127
+Assim, o mesmo cadastro pode
+ter mais de uma dívida.
+
+110
+00:12:02,127 --> 00:12:09,015
+O contexto da empresa ajuda a consultar
+apenas os contratos daquele credor.
+
+111
+00:12:09,015 --> 00:12:17,052
+Clique em Abrir cadastro para analisar as
+informações, o histórico e as ações disponíveis
+
+112
+00:12:17,052 --> 00:12:19,922
+antes de entrar em contato.
+
+113
+00:12:21,200 --> 00:12:27,810
+No detalhe do devedor, confira documento,
+telefone, e-mail e situação operacional.
+
+114
+00:12:27,810 --> 00:12:33,818
+A página reúne contratos, propostas,
+acordos e histórico de contatos.
+
+115
+00:12:33,818 --> 00:12:41,630
+O bloqueio operacional impede contatos e
+negociações, e deve ser usado com critério.
+
+116
+00:12:41,630 --> 00:12:46,437
+Ele é global para a pessoa nesta demonstração.
+
+117
+00:12:46,437 --> 00:12:55,450
+O botão Registrar atendimento leva para a fila
+de cobrança com esse devedor em contexto.
+
+118
+00:12:55,450 --> 00:13:02,661
+Ter um telefone cadastrado não significa
+que o sistema fará uma ligação:
+
+119
+00:13:02,661 --> 00:13:09,270
+os contatos são registrados pela equipe,
+sem comunicação automática nesta versão.
+
+120
+00:13:10,600 --> 00:13:17,654
+Na Operação de cobrança, a fila mostra
+devedor, empresa, contrato, saldo e vencimento
+
+121
+00:13:17,654 --> 00:13:26,336
+original. Use a busca para localizar a pessoa
+e clique em Selecionar na linha do contrato
+
+122
+00:13:26,336 --> 00:13:35,018
+desejado. A seleção é feita por contrato, mesmo
+quando uma pessoa possui mais de uma dívida.
+
+123
+00:13:35,018 --> 00:13:42,072
+Abaixo da fila ficam os dados do
+contrato e o histórico de atendimento.
+
+124
+00:13:42,072 --> 00:13:48,041
+O histórico reúne os contatos da
+pessoa com a empresa selecionada.
+
+125
+00:13:48,041 --> 00:13:55,095
+Acordos já vigentes e casos encerrados não
+ficam disponíveis como novas cobranças normais
+
+126
+00:13:55,095 --> 00:13:56,181
+nessa fila.
+
+127
+00:13:57,400 --> 00:14:05,257
+Clique em Registrar atendimento. O modal
+identifica devedor, empresa, contrato e saldo,
+
+128
+00:14:05,257 --> 00:14:10,495
+para você conferir o contexto antes de salvar.
+
+129
+00:14:10,495 --> 00:14:18,352
+Selecione o resultado do contato: contato
+realizado, sem contato, retorno agendado, promessa
+
+130
+00:14:18,352 --> 00:14:26,864
+de pagamento ou encerrado. Escreva uma observação
+objetiva com pelo menos cinco caracteres.
+
+131
+00:14:26,864 --> 00:14:34,721
+Quando escolher retorno agendado, informe
+uma data válida, de hoje em diante.
+
+132
+00:14:34,721 --> 00:14:40,613
+Cancelar ou fechar antes de
+salvar descarta o formulário.
+
+133
+00:14:40,613 --> 00:14:45,851
+Dados inválidos mantêm o
+modal aberto para correção.
+
+134
+00:14:45,851 --> 00:14:50,435
+O perfil Financeiro não pode
+registrar atendimentos.
+
+135
+00:14:51,800 --> 00:14:58,955
+Ao selecionar Promessa de pagamento, aparecem
+os campos de data e valor prometido.
+
+136
+00:14:58,955 --> 00:15:06,110
+O valor precisa ser positivo e a
+data não pode estar no passado.
+
+137
+00:15:06,110 --> 00:15:10,513
+Aqui registramos uma promessa
+fictícia de duzentos reais.
+
+138
+00:15:10,513 --> 00:15:17,668
+Isso não cria pagamento, não baixa
+parcela e não aumenta o valor recebido.
+
+139
+00:15:17,668 --> 00:15:24,824
+É um compromisso registrado no atendimento.
+A opção Encerrado retira a pessoa daquela
+
+140
+00:15:24,824 --> 00:15:30,878
+fila de cobrança da empresa, mas
+mantém seu cadastro e histórico.
+
+141
+00:15:30,878 --> 00:15:38,583
+Antes de encerrar um caso, confira se essa
+é realmente a decisão operacional desejada.
+
+142
+00:15:39,800 --> 00:15:45,073
+Depois de preencher os campos,
+clique em Salvar atendimento.
+
+143
+00:15:45,073 --> 00:15:54,448
+Quando a gravação termina com sucesso, o modal
+fecha e o histórico é atualizado na tela.
+
+144
+00:15:54,448 --> 00:16:02,066
+O registro mostra resultado, observação, data,
+horário e, quando houver, data de retorno
+
+145
+00:16:02,066 --> 00:16:10,855
+ou promessa e valor prometido. Se o armazenamento
+falhar, o sistema não confirma a alteração.
+
+146
+00:16:10,855 --> 00:16:17,300
+A equipe deve usar esse histórico
+para dar continuidade ao caso.
+
+147
+00:16:17,300 --> 00:16:24,331
+Para seguir com uma proposta, utilize Encaminhar
+para negociação no contrato selecionado.
+
+148
+00:16:25,600 --> 00:16:31,865
+Na negociação, confira a empresa,
+o contrato e a política aplicável.
+
+149
+00:16:31,865 --> 00:16:35,853
+Ajuste desconto, entrada
+e quantidade de parcelas.
+
+150
+00:16:35,853 --> 00:16:43,257
+O resumo mostra valor original, desconto em
+reais, total negociado e distribuição das
+
+151
+00:16:43,257 --> 00:16:51,231
+parcelas. Neste exemplo, a dívida de mil
+duzentos e cinquenta reais e cinquenta centavos
+
+152
+00:16:51,231 --> 00:17:01,484
+recebe dez por cento de desconto e fica em
+mil cento e vinte e cinco reais e quarenta
+
+153
+00:17:01,484 --> 00:17:09,458
+e cinco centavos. Sem entrada, duas parcelas
+somam exatamente esse total, com o centavo
+
+154
+00:17:09,458 --> 00:17:15,154
+residual na última. Simular condições
+ainda não formaliza o acordo.
+
+155
+00:17:16,400 --> 00:17:25,145
+Clique em Revisar proposta. Essa etapa salva
+a proposta e apresenta as condições para
+
+156
+00:17:25,145 --> 00:17:31,392
+conferência. Verifique total, entrada,
+parcelas, vencimentos e limites da política.
+
+157
+00:17:31,392 --> 00:17:37,638
+Dentro do limite automático, o
+fluxo permite registrar o aceite.
+
+158
+00:17:37,638 --> 00:17:45,759
+A caixa Confirmo o aceite representa a confirmação
+manual pela equipe nesta demonstração.
+
+159
+00:17:45,759 --> 00:17:53,255
+Ela não envia assinatura eletrônica
+nem prova a identidade real de alguém.
+
+160
+00:17:53,255 --> 00:17:58,877
+Se você modificar as condições,
+será necessário revisar novamente.
+
+161
+00:17:58,877 --> 00:18:05,123
+Não confirme um acordo apenas
+para testar com dados reais:
+
+162
+00:18:05,123 --> 00:18:09,496
+todo o cenário deste tutorial é fictício.
+
+163
+00:18:10,800 --> 00:18:16,968
+Depois da revisão e do aceite, clique
+em Confirmar acordo demonstrativo.
+
+164
+00:18:16,968 --> 00:18:22,576
+O sistema cria o acordo e
+seu cronograma de parcelas.
+
+165
+00:18:22,576 --> 00:18:28,183
+O modal permite conferir os
+valores e as datas geradas.
+
+166
+00:18:28,183 --> 00:18:34,352
+Uma dívida não pode receber dois
+acordos vigentes na mesma base.
+
+167
+00:18:34,352 --> 00:18:42,202
+Se houver entrada, ela vence hoje, e as
+parcelas seguintes começam no mês seguinte.
+
+168
+00:18:42,202 --> 00:18:46,128
+Sem entrada, a primeira parcela vence hoje.
+
+169
+00:18:46,128 --> 00:18:53,978
+O recebimento continua separado: nenhuma
+parcela é marcada como paga só porque o acordo
+
+170
+00:18:53,978 --> 00:18:55,100
+foi criado.
+
+171
+00:18:56,400 --> 00:19:05,123
+Em Acordos, consulte os registros formalizados
+e use a busca e o filtro de situação.
+
+172
+00:19:05,123 --> 00:19:09,194
+A empresa selecionada limita o conjunto exibido.
+
+173
+00:19:09,194 --> 00:19:17,918
+A situação é derivada dos dados: um acordo pode
+estar ativo, em atraso, cumprido, cancelado
+
+174
+00:19:17,918 --> 00:19:26,059
+ou rompido. O simples vencimento de uma
+parcela pode colocar o acordo em atraso.
+
+175
+00:19:26,059 --> 00:19:30,130
+Para entender um caso, abra Consultar acordo.
+
+176
+00:19:30,130 --> 00:19:37,109
+Os valores negociados não devem ser
+confundidos com os valores já recebidos:
+
+177
+00:19:37,109 --> 00:19:41,761
+essa comparação depende das
+baixas confirmadas no Financeiro.
+
+178
+00:19:43,000 --> 00:19:52,767
+No detalhe do acordo, confira as condições
+aceitas, o cronograma e o andamento das parcelas.
+
+179
+00:19:52,767 --> 00:19:58,628
+O sistema oferece um comprovante em
+texto, explicitamente demonstrativo.
+
+180
+00:19:58,628 --> 00:20:04,488
+Ele não substitui contrato formal,
+assinatura ou documento financeiro.
+
+181
+00:20:04,488 --> 00:20:12,954
+O cancelamento é restrito ao Administrador
+e exige ausência de recebimentos, além das
+
+182
+00:20:12,954 --> 00:20:18,163
+demais restrições do acordo.
+Cancelar preserva o histórico.
+
+183
+00:20:18,163 --> 00:20:25,977
+Um acordo com pagamento registrado não pode
+ser simplesmente cancelado nesse fluxo.
+
+184
+00:20:25,977 --> 00:20:31,837
+Não há rotina de estorno financeiro
+implementada nesta demonstração.
+
+185
+00:20:33,200 --> 00:20:40,760
+Abra Financeiro para acompanhar parcelas
+pagas, vencidas, a vencer e com divergência.
+
+186
+00:20:40,760 --> 00:20:48,320
+A tela mostra valores negociados e
+recebidos, além de posições de vencimento.
+
+187
+00:20:48,320 --> 00:20:55,880
+O cenário atual considera pagamentos diretamente
+ao credor e registro manual demonstrativo
+
+188
+00:20:55,880 --> 00:21:03,440
+da confirmação. Não existe Pix, boleto,
+integração bancária ou dinheiro passando pelo
+
+189
+00:21:03,440 --> 00:21:08,480
+sistema. Administrador e Financeiro
+podem conciliar; Operador consulta.
+
+190
+00:21:08,480 --> 00:21:18,560
+Na linha da parcela correta, clique em Conciliar
+e compare o valor esperado com a confirmação
+
+191
+00:21:18,560 --> 00:21:20,450
+que será registrada.
+
+192
+00:21:21,800 --> 00:21:30,358
+Para mostrar a proteção do fluxo, informamos
+um real a menos que o valor esperado.
+
+193
+00:21:30,358 --> 00:21:38,916
+Ao registrar a conciliação, o sistema identifica
+a diferença e mantém a parcela sem quitação.
+
+194
+00:21:38,916 --> 00:21:46,333
+A divergência fica visível para análise. Ela
+não é convertida automaticamente em desconto,
+
+195
+00:21:46,333 --> 00:21:52,609
+pagamento parcial ou recebimento confirmado.
+A referência da confirmação também precisa
+
+196
+00:21:52,609 --> 00:22:01,167
+ser informada. Na operação real, a equipe deve
+investigar a origem da diferença e conferir
+
+197
+00:22:01,167 --> 00:22:06,302
+a evidência do recebimento antes
+de registrar uma correção.
+
+198
+00:22:07,600 --> 00:22:15,190
+Agora informamos o valor exato da parcela
+e uma referência fictícia de confirmação.
+
+199
+00:22:15,190 --> 00:22:22,197
+A gravação confirma o recebimento demonstrativo
+e atualiza a situação da parcela.
+
+200
+00:22:22,197 --> 00:22:30,371
+Uma referência já utilizada em pagamento
+confirmado é recusada, e uma parcela paga não
+
+201
+00:22:30,371 --> 00:22:38,546
+pode ser confirmada duas vezes. A rotina
+também verifica o acordo e as permissões.
+
+202
+00:22:38,546 --> 00:22:43,217
+Neste exemplo, confirmamos
+apenas uma das duas parcelas:
+
+203
+00:22:43,217 --> 00:22:51,391
+a outra continua aberta. Para quitar o acordo
+inteiro, todas as suas parcelas precisam
+
+204
+00:22:51,391 --> 00:22:53,142
+ter recebimento confirmado.
+
+205
+00:22:54,400 --> 00:22:58,830
+Voltamos ao dashboard com a Aurora selecionada.
+
+206
+00:22:58,830 --> 00:23:07,690
+Os módulos consultam a mesma base, portanto
+a negociação e o recebimento aparecem nos
+
+207
+00:23:07,690 --> 00:23:14,651
+indicadores correspondentes. O negociado reflete
+o acordo formalizado; o recebido reflete
+
+208
+00:23:14,651 --> 00:23:19,714
+apenas a parcela confirmada.
+Observe o período selecionado:
+
+209
+00:23:19,714 --> 00:23:26,675
+um registro fora da janela pode
+não entrar no indicador temporal.
+
+210
+00:23:26,675 --> 00:23:32,371
+As comparações dependem de dados
+válidos no período anterior.
+
+211
+00:23:32,371 --> 00:23:38,700
+Alguns números são posições atuais, sem
+uma comparação histórica inventada.
+
+212
+00:23:38,700 --> 00:23:43,762
+Use as ajudas para interpretar
+corretamente cada resultado.
+
+213
+00:23:45,000 --> 00:23:53,239
+Para demonstrar a exceção, abrimos a segunda
+dívida da Aurora e simulamos vinte e cinco
+
+214
+00:23:53,239 --> 00:24:00,379
+por cento de desconto. Como a política permite
+aprovação automática somente até vinte
+
+215
+00:24:00,379 --> 00:24:05,322
+por cento, a proposta fica aguardando
+aprovação do Administrador.
+
+216
+00:24:05,322 --> 00:24:12,462
+Isso não significa que ela foi
+aceita nem que o acordo já existe.
+
+217
+00:24:12,462 --> 00:24:19,053
+O desconto continua dentro do máximo
+de trinta por cento da empresa.
+
+218
+00:24:19,053 --> 00:24:23,446
+Se ultrapassasse esse máximo,
+a proposta seria recusada:
+
+219
+00:24:23,446 --> 00:24:28,939
+o Administrador não pode aprovar
+condições acima do teto configurado.
+
+220
+00:24:30,200 --> 00:24:37,064
+O Administrador analisa as condições
+e pode clicar em Aprovar proposta.
+
+221
+00:24:37,064 --> 00:24:46,424
+A aprovação fica registrada, mas ainda é
+necessário retomar a proposta e concluir o aceite
+
+222
+00:24:46,424 --> 00:24:53,912
+para formalizar um acordo. Neste tutorial,
+deixamos essa segunda proposta aprovada, sem
+
+223
+00:24:53,912 --> 00:24:58,904
+aceitar, para destacar a
+diferença entre esses estados.
+
+224
+00:24:58,904 --> 00:25:06,393
+Proposta simulada, proposta aprovada, acordo
+aceito e parcela recebida são eventos separados.
+
+225
+00:25:06,393 --> 00:25:14,505
+Essa separação evita que uma decisão de
+negociação seja confundida com autorização para
+
+226
+00:25:14,505 --> 00:25:16,377
+dar baixa financeira.
+
+227
+00:25:17,600 --> 00:25:24,726
+Em Campanhas, você organiza uma ação
+por empresa e critério de atraso.
+
+228
+00:25:24,726 --> 00:25:31,851
+Clique em Nova campanha, dê um nome
+claro e confira a segmentação.
+
+229
+00:25:31,851 --> 00:25:38,977
+O público é formado por contratos elegíveis,
+respeitando bloqueios e demais regras.
+
+230
+00:25:38,977 --> 00:25:45,509
+A campanha ajuda a organizar e
+visualizar o conjunto da ação.
+
+231
+00:25:45,509 --> 00:25:51,447
+Ela não representa, sozinha, um
+contato realizado com cada pessoa.
+
+232
+00:25:51,447 --> 00:25:56,791
+Os atendimentos continuam sendo
+registrados na operação de cobrança.
+
+233
+00:25:56,791 --> 00:26:04,511
+Nesta etapa, não há conexão com WhatsApp,
+telefone, e-mail ou outro canal externo.
+
+234
+00:26:05,800 --> 00:26:13,757
+Depois de criar a campanha, a opção Simular
+campanha demonstra o processamento do público
+
+235
+00:26:13,757 --> 00:26:21,714
+e atualiza o estado do registro. A própria
+interface informa que nenhuma mensagem foi
+
+236
+00:26:21,714 --> 00:26:29,103
+enviada. Não interprete a simulação como disparo
+real, confirmação de entrega ou conversão
+
+237
+00:26:29,103 --> 00:26:34,787
+em pagamento. Os recebimentos continuam
+dependendo da conciliação das parcelas.
+
+238
+00:26:34,787 --> 00:26:42,744
+Quando houver uma integração real de comunicação
+no futuro, ela precisará de regras e
+
+239
+00:26:42,744 --> 00:26:50,701
+controles próprios. O que você vê aqui é apenas
+a organização demonstrativa da campanha.
+
+240
+00:26:52,000 --> 00:26:57,759
+Em Relatórios, escolha entre carteiras,
+acordos, recuperação, pagamentos, inadimplência
+
+241
+00:26:57,759 --> 00:27:04,158
+e produtividade. Ajuste as datas
+e confira a empresa selecionada.
+
+242
+00:27:04,158 --> 00:27:09,278
+Cada relatório aplica o
+período conforme seu assunto:
+
+243
+00:27:09,278 --> 00:27:16,956
+criação, recebimento, vencimento ou atendimento.
+A exportação CSV usa todas as linhas
+
+244
+00:27:16,956 --> 00:27:22,076
+filtradas, não apenas a
+página visível da tabela.
+
+245
+00:27:22,076 --> 00:27:32,314
+Se a seleção estiver vazia ou as datas forem
+inválidas, revise os filtros antes de exportar.
+
+246
+00:27:32,314 --> 00:27:41,273
+O arquivo facilita a conferência externa,
+mas não substitui um backup completo da base
+
+247
+00:27:41,273 --> 00:27:43,193
+e dos anexos.
+
+248
+00:27:44,400 --> 00:27:52,588
+De volta a Empresas, o botão Detalhes
+reúne a relação da Gamma com a Aurora.
+
+249
+00:27:52,588 --> 00:28:00,230
+Você encontra os contatos, a referência do
+contrato de serviços, a vigência, as condições
+
+250
+00:28:00,230 --> 00:28:05,143
+comerciais, o PDF anexado, as
+carteiras e as importações.
+
+251
+00:28:05,143 --> 00:28:15,515
+Esse é o ponto de consulta para responder de
+onde veio um lote e a qual empresa ele pertence.
+
+252
+00:28:15,515 --> 00:28:19,882
+O PDF fica armazenado na mesma base local.
+
+253
+00:28:19,882 --> 00:28:26,433
+A vigência é cadastral: ela não suspende
+automaticamente cobranças nem recalcula acordos
+
+254
+00:28:26,433 --> 00:28:27,524
+ou comissões.
+
+255
+00:28:28,800 --> 00:28:36,144
+Nas Configurações, abra Auditoria para conferir
+data, usuário, ação e registro das operações.
+
+256
+00:28:36,144 --> 00:28:42,359
+A trilha ajuda a acompanhar o
+que foi feito na demonstração.
+
+257
+00:28:42,359 --> 00:28:50,268
+O filtro de empresa também pode limitar essa
+consulta; para revisar a operação global,
+
+258
+00:28:50,268 --> 00:28:57,612
+selecione Todos os credores. Não trate essa
+auditoria local como registro inviolável de
+
+259
+00:28:57,612 --> 00:29:05,522
+produção. Com usuários reais, a identidade e
+as permissões precisam vir de um servidor,
+
+260
+00:29:05,522 --> 00:29:12,866
+e os eventos de auditoria precisam ser
+armazenados de forma durável e protegida.
+
+261
+00:29:14,200 --> 00:29:21,701
+Na aba Usuários e permissões, o demonstrador
+permite alternar livremente entre os três
+
+262
+00:29:21,701 --> 00:29:29,778
+perfis para explorar restrições da interface.
+Isso não é uma gestão de usuários reais.
+
+263
+00:29:29,778 --> 00:29:36,702
+O Administrador controla cadastros, políticas
+e aprovações; o Operador atende e negocia;
+
+264
+00:29:36,702 --> 00:29:45,356
+o Financeiro consulta e concilia. Na versão
+de produção, cada pessoa deverá ter uma conta
+
+265
+00:29:45,356 --> 00:29:51,703
+individual, permissões verificadas no servidor
+e procedimentos de acesso e recuperação
+
+266
+00:29:51,703 --> 00:29:58,627
+de senha. Não compartilhe as credenciais
+demonstrativas como se fossem contas seguras
+
+267
+00:29:58,627 --> 00:30:00,934
+de uma operação real.
+
+268
+00:30:02,200 --> 00:30:09,877
+Na aba Parâmetros, o Administrador configura o
+prazo sugerido para retorno dos atendimentos.
+
+269
+00:30:09,877 --> 00:30:15,783
+O botão Restaurar demonstração reinicia
+o cenário e exige confirmação.
+
+270
+00:30:15,783 --> 00:30:21,688
+Não use essa ação como uma
+operação comum de cobrança.
+
+271
+00:30:21,688 --> 00:30:28,775
+Os dados e os anexos desta versão
+ficam no IndexedDB do navegador.
+
+272
+00:30:28,775 --> 00:30:37,633
+A sincronização entre abas acontece na mesma
+origem, mas isso não cria uma base compartilhada
+
+273
+00:30:37,633 --> 00:30:44,129
+entre computadores. Limpar os dados do
+navegador pode remover a demonstração.
+
+274
+00:30:44,129 --> 00:30:51,215
+Antes de operar com dados reais, será necessário
+implantar backend, banco centralizado,
+
+275
+00:30:51,215 --> 00:30:53,578
+backups e autenticação real.
+
+276
+00:30:54,800 --> 00:31:03,545
+Ao terminar, clique em Sair. A sessão administrativa
+é encerrada nas abas da mesma origem,
+
+277
+00:31:03,545 --> 00:31:08,792
+sem apagar as empresas,
+as dívidas ou os acordos.
+
+278
+00:31:08,792 --> 00:31:17,537
+A rotina recomendada é: o gestor cadastra a
+empresa e a política, o administrador prepara
+
+279
+00:31:17,537 --> 00:31:25,117
+as carteiras e importações, a equipe registra
+e acompanha os contatos, negocia dentro
+
+280
+00:31:25,117 --> 00:31:29,781
+das regras, e o Financeiro
+confere os recebimentos.
+
+281
+00:31:29,781 --> 00:31:35,028
+O gestor acompanha tudo pelos
+relatórios e pelo dashboard.
+
+282
+00:31:35,028 --> 00:31:42,024
+A base atual demonstra esse fluxo interno;
+integrações reais, distribuição de operadores,
+
+283
+00:31:42,024 --> 00:31:46,105
+comissões e repasses continuam
+como etapas futuras.
+
+284
+00:31:46,105 --> 00:31:50,769
+Obrigado por acompanhar o
+treinamento do Gamma Recover.

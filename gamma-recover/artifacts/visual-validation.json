@@ -1,0 +1,16 @@
+{
+  "domainSourcesPreserved": true,
+  "changedDomainSources": [],
+  "oversizedSourceFiles": [],
+  "unitAndComponentTests": 36,
+  "endToEndScenarios": 9,
+  "responsiveWidths": [
+    320,
+    390,
+    768,
+    1024,
+    1280,
+    1440
+  ],
+  "financialReadOnlyFlowVerified": true
+}
